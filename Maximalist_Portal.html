@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximalist Labs Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body { background-color: #050505; color: #ededed; font-family: ui-sans-serif, system-ui, sans-serif; }
+        .glass-panel { background: rgba(30, 30, 30, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen items-center p-6">
+
+    <!-- Header -->
+    <header class="w-full max-w-md text-center mt-8 mb-10">
+        <h1 class="text-3xl font-bold tracking-widest text-white uppercase">Maximalist</h1>
+        <p class="text-cyan-400 font-mono text-sm tracking-[0.3em] mt-1">SYSTEM_PORTAL</p>
+    </header>
+
+    <main class="w-full max-w-md space-y-6">
+        
+        <!-- Connection Status -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col items-center">
+            <div id="statusIndicator" class="w-4 h-4 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] mb-4"></div>
+            <p id="statusText" class="text-sm font-mono text-gray-400 mb-4">DISCONNECTED</p>
+            <button id="connectBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-[0_0_20px_rgba(8,145,178,0.4)] uppercase tracking-wider">
+                Establish Link
+            </button>
+            <button id="disconnectBtn" class="w-full bg-red-900/50 hover:bg-red-800/50 border border-red-500/30 text-red-200 font-bold py-3 px-4 rounded-xl transition-all hidden uppercase tracking-wider mt-2">
+                Sever Link
+            </button>
+        </div>
+
+        <!-- Controls (Hidden until connected) -->
+        <div id="controlsPanel" class="space-y-6 opacity-30 pointer-events-none transition-opacity duration-500">
+            
+            <!-- Send Text -->
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-xs font-mono text-cyan-400 mb-3 uppercase tracking-widest">Push Message</h2>
+                <div class="flex gap-2">
+                    <input type="text" id="textInput" maxlength="24" placeholder="Enter text..." class="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-500 text-white placeholder-gray-600 font-mono">
+                    <button id="sendTextBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-5 rounded-xl transition-all flex items-center justify-center">
+                        <i class="ph ph-paper-plane-right text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Face Selector -->
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-xs font-mono text-cyan-400 mb-3 uppercase tracking-widest">Active UI Module</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="face-btn bg-gray-800/80 hover:bg-gray-700 border border-transparent rounded-xl py-4 flex flex-col items-center gap-2 transition-all focus:border-cyan-500" data-cmd="0">
+                        <i class="ph ph-atom text-2xl text-cyan-400"></i>
+                        <span class="text-xs font-mono">BRAND LOGO</span>
+                    </button>
+                    <button class="face-btn bg-gray-800/80 hover:bg-gray-700 border border-transparent rounded-xl py-4 flex flex-col items-center gap-2 transition-all focus:border-cyan-500" data-cmd="1">
+                        <i class="ph ph-chat-text text-2xl text-magenta-400"></i>
+                        <span class="text-xs font-mono">TEXT BUFFER</span>
+                    </button>
+                    <button class="face-btn bg-gray-800/80 hover:bg-gray-700 border border-transparent rounded-xl py-4 flex flex-col items-center gap-2 transition-all focus:border-cyan-500 col-span-2" data-cmd="2">
+                        <i class="ph ph-cpu text-2xl text-orange-400"></i>
+                        <span class="text-xs font-mono">SYSTEM TELEMETRY</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // BLE UUIDs must match the ESP32 code exactly
+        const SERVICE_UUID = "19b10000-e8f2-537e-4f6c-d104768a1214";
+        const CHAR_TEXT_UUID = "19b10001-e8f2-537e-4f6c-d104768a1214";
+        const CHAR_CMD_UUID = "19b10002-e8f2-537e-4f6c-d104768a1214";
+
+        let bleDevice;
+        let gattServer;
+        let textCharacteristic;
+        let cmdCharacteristic;
+
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const controlsPanel = document.getElementById('controlsPanel');
+        const sendTextBtn = document.getElementById('sendTextBtn');
+        const textInput = document.getElementById('textInput');
+        const faceButtons = document.querySelectorAll('.face-btn');
+
+        async function connectBLE() {
+            try {
+                console.log('Requesting Bluetooth Device...');
+                bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ name: 'MAXIMALIST-KEY' }],
+                    optionalServices: [SERVICE_UUID]
+                });
+
+                bleDevice.addEventListener('gattserverdisconnected', handleDisconnect);
+
+                statusText.innerText = "CONNECTING...";
+                statusIndicator.className = "w-4 h-4 rounded-full bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.8)] mb-4 animate-pulse";
+
+                gattServer = await bleDevice.gatt.connect();
+                const service = await gattServer.getPrimaryService(SERVICE_UUID);
+                
+                textCharacteristic = await service.getCharacteristic(CHAR_TEXT_UUID);
+                cmdCharacteristic = await service.getCharacteristic(CHAR_CMD_UUID);
+
+                // UI Updates on Success
+                statusText.innerText = "LINK ESTABLISHED";
+                statusIndicator.className = "w-4 h-4 rounded-full bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)] mb-4";
+                connectBtn.classList.add('hidden');
+                disconnectBtn.classList.remove('hidden');
+                controlsPanel.classList.remove('opacity-30', 'pointer-events-none');
+
+            } catch (error) {
+                console.error("Connection failed!", error);
+                statusText.innerText = "CONNECTION FAILED";
+                statusIndicator.className = "w-4 h-4 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] mb-4";
+            }
+        }
+
+        function handleDisconnect() {
+            console.log('Device disconnected');
+            statusText.innerText = "DISCONNECTED";
+            statusIndicator.className = "w-4 h-4 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] mb-4";
+            connectBtn.classList.remove('hidden');
+            disconnectBtn.classList.add('hidden');
+            controlsPanel.classList.add('opacity-30', 'pointer-events-none');
+        }
+
+        async function sendText() {
+            if (!textCharacteristic) return;
+            const text = textInput.value;
+            if (text.length === 0) return;
+            
+            try {
+                const encoder = new TextEncoder();
+                await textCharacteristic.writeValue(encoder.encode(text));
+                console.log("Sent Text:", text);
+                textInput.value = ""; // clear input
+            } catch (error) {
+                console.error("Failed to send text", error);
+            }
+        }
+
+        async function sendCommand(cmdValue) {
+            if (!cmdCharacteristic) return;
+            try {
+                const encoder = new TextEncoder();
+                // Send command as a string number ("0", "1", or "2")
+                await cmdCharacteristic.writeValue(encoder.encode(cmdValue.toString()));
+                console.log("Sent Command:", cmdValue);
+            } catch (error) {
+                console.error("Failed to send command", error);
+            }
+        }
+
+        // Event Listeners
+        connectBtn.addEventListener('click', connectBLE);
+        
+        disconnectBtn.addEventListener('click', () => {
+            if (bleDevice && bleDevice.gatt.connected) {
+                bleDevice.gatt.disconnect();
+            }
+        });
+
+        sendTextBtn.addEventListener('click', sendText);
+        textInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendText();
+        });
+
+        faceButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cmd = btn.getAttribute('data-cmd');
+                sendCommand(cmd);
+            });
+        });
+    </script>
+</body>
+</html>
