@@ -42,11 +42,13 @@
         const CHAR_TEXT_UUID = "19b10001-e8f2-537e-4f6c-d104768a1214";
         const CHAR_CMD_UUID  = "19b10002-e8f2-537e-4f6c-d104768a1214";
         const CHAR_IMG_UUID  = "19b10003-e8f2-537e-4f6c-d104768a1214"; 
+        const CHAR_RENAME_UUID = "19b10004-e8f2-537e-4f6c-d104768a1214";
 
         function App() {
             const [connectionStatus, setConnectionStatus] = useState('DISCONNECTED'); 
             const [inputText, setInputText] = useState('');
             const [isUploading, setIsUploading] = useState(false);
+            const [newDeviceName, setNewDeviceName] = useState('');
             
             // Canvas State
             const [brushColor, setBrushColor] = useState('#22d3ee'); 
@@ -57,6 +59,7 @@
             const textCharRef = useRef(null);
             const cmdCharRef = useRef(null);
             const imgCharRef = useRef(null);
+            const renameCharRef = useRef(null);
             const fileInputRef = useRef(null);
 
             // Initialize canvas background to black
@@ -78,7 +81,6 @@
                 try {
                     setConnectionStatus('CONNECTING');
                     
-                    // FIXED: Request Device filter opened up to bypass MAC address caching
                     const device = await navigator.bluetooth.requestDevice({
                         acceptAllDevices: true,
                         optionalServices: [SERVICE_UUID]
@@ -93,6 +95,7 @@
                     textCharRef.current = await service.getCharacteristic(CHAR_TEXT_UUID);
                     cmdCharRef.current = await service.getCharacteristic(CHAR_CMD_UUID);
                     imgCharRef.current = await service.getCharacteristic(CHAR_IMG_UUID);
+                    renameCharRef.current = await service.getCharacteristic(CHAR_RENAME_UUID);
 
                     setConnectionStatus('CONNECTED');
                 } catch (error) {
@@ -122,13 +125,22 @@
                 } catch (error) {}
             };
 
-            // --- Core Image/Canvas Streamer ---
+            const renameDevice = async () => {
+                if (!renameCharRef.current || !newDeviceName) return;
+                try {
+                    const encoder = new TextEncoder();
+                    await renameCharRef.current.writeValue(encoder.encode(newDeviceName.trim().toUpperCase()));
+                    setNewDeviceName('');
+                } catch (error) {}
+            };
+
+            // --- High-Speed Image/Canvas Streamer ---
             const streamToKeychain = async (sourceCanvas) => {
                 if (!imgCharRef.current) return;
                 setIsUploading(true);
 
                 try {
-                    await sendCommand(8); // Prep screen window
+                    await sendCommand(8); 
                     await new Promise(r => setTimeout(r, 50)); 
 
                     const ctx = sourceCanvas.getContext('2d');
@@ -145,9 +157,11 @@
                         rgb565Data[ptr++] = rgb & 0xFF;
                     }
 
-                    for (let i = 0; i < rgb565Data.length; i += 256) {
-                        const chunk = rgb565Data.slice(i, i + 256);
+                    // UPGRADED SPEED: 500 byte chunks, 5ms delay
+                    for (let i = 0; i < rgb565Data.length; i += 500) {
+                        const chunk = rgb565Data.slice(i, i + 500);
                         await imgCharRef.current.writeValue(chunk);
+                        await new Promise(r => setTimeout(r, 5)); 
                     }
                 } catch (error) {
                     console.error("Stream failed", error);
@@ -189,7 +203,6 @@
                 const canvas = canvasRef.current;
                 const ctx = canvas.getContext('2d');
                 
-                // Calculate position considering canvas scaling
                 const rect = canvas.getBoundingClientRect();
                 const scaleX = canvas.width / rect.width;
                 const scaleY = canvas.height / rect.height;
@@ -200,7 +213,7 @@
                 const x = (clientX - rect.left) * scaleX;
                 const y = (clientY - rect.top) * scaleY;
 
-                ctx.lineWidth = brushColor === '#000000' ? 20 : 8; // Erase is thicker
+                ctx.lineWidth = brushColor === '#000000' ? 20 : 8; 
                 ctx.lineCap = 'round';
                 ctx.strokeStyle = brushColor;
 
@@ -314,6 +327,45 @@
                                     </button>
                                 </div>
                             </div>
+                            
+                            {/* Device Configuration */}
+                            <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6">
+                                <h3 className="text-[10px] font-mono text-gray-400 mb-3 uppercase tracking-widest">System Configuration</h3>
+                                <div className="flex gap-2 mb-4">
+                                    <input 
+                                        type="text" 
+                                        maxLength="16" 
+                                        value={newDeviceName}
+                                        onChange={(e) => setNewDeviceName(e.target.value)}
+                                        placeholder="RENAME DEVICE..." 
+                                        className="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-500 text-white placeholder-gray-600 font-mono text-sm uppercase"
+                                    />
+                                    <button 
+                                        onClick={renameDevice}
+                                        className="bg-gray-800 hover:bg-cyan-900 text-cyan-400 font-bold px-4 rounded-xl transition-all border border-gray-700 hover:border-cyan-500 text-xs"
+                                    >
+                                        APPLY
+                                    </button>
+                                </div>
+                                <div className="flex gap-2 border-t border-white/10 pt-4 mt-2">
+                                    <input 
+                                        type="text" 
+                                        maxLength="24" 
+                                        value={inputText}
+                                        onChange={(e) => setInputText(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && sendText()}
+                                        placeholder="PUSH MESSAGE..." 
+                                        className="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-magenta-500 text-white placeholder-gray-600 font-mono text-sm"
+                                    />
+                                    <button 
+                                        onClick={sendText}
+                                        className="bg-gray-800 hover:bg-gray-700 text-white px-5 rounded-xl transition-all flex items-center justify-center border border-gray-700 hover:border-magenta-500"
+                                    >
+                                        <Send size={20} />
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </main>
                 </div>
