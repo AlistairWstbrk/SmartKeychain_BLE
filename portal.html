@@ -3,19 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maximalist Labs Portal</title>
+    <title>Maximalist Labs // BLE Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Industrial Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
     <style>
-        body { overscroll-behavior-y: contain; }
+        body { 
+            overscroll-behavior-y: contain; 
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+        }
         /* Custom styling for the color input */
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { panel: '#121214', borderline: '#27272a', accent: '#2563eb' }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-[#050505]">
+<body class="text-zinc-100 antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -46,7 +66,7 @@
         const CHAR_CMD_UUID  = "19b10002-e8f2-537e-4f6c-d104768a1214";
         const CHAR_IMG_UUID  = "19b10003-e8f2-537e-4f6c-d104768a1214"; 
         const CHAR_RENAME_UUID = "19b10004-e8f2-537e-4f6c-d104768a1214";
-        const CHAR_COLOR_UUID = "19b10005-e8f2-537e-4f6c-d104768a1214"; // New Color Channel
+        const CHAR_COLOR_UUID = "19b10005-e8f2-537e-4f6c-d104768a1214";
 
         function App() {
             const [connectionStatus, setConnectionStatus] = useState('DISCONNECTED'); 
@@ -54,9 +74,8 @@
             const [isUploading, setIsUploading] = useState(false);
             const [newDeviceName, setNewDeviceName] = useState('');
             
-            // Canvas & Aura State
-            const [brushColor, setBrushColor] = useState('#22d3ee'); 
-            const [auraColor, setAuraColor] = useState('#22d3ee'); 
+            const [brushColor, setBrushColor] = useState('#2563eb'); 
+            const [auraColor, setAuraColor] = useState('#2563eb'); 
             const canvasRef = useRef(null);
             const isDrawing = useRef(false);
             
@@ -85,7 +104,6 @@
             const connectBLE = async () => {
                 try {
                     setConnectionStatus('CONNECTING');
-                    
                     const device = await navigator.bluetooth.requestDevice({
                         acceptAllDevices: true,
                         optionalServices: [SERVICE_UUID]
@@ -143,7 +161,6 @@
             const applyAuraColor = async () => {
                 if (!colorCharRef.current) return;
                 try {
-                    // Convert Hex to 3 RGB bytes
                     const r = parseInt(auraColor.slice(1, 3), 16);
                     const g = parseInt(auraColor.slice(3, 5), 16);
                     const b = parseInt(auraColor.slice(5, 7), 16);
@@ -180,9 +197,7 @@
                         await imgCharRef.current.writeValue(chunk);
                         await new Promise(r => setTimeout(r, 5)); 
                     }
-                } catch (error) {
-                    console.error("Stream failed", error);
-                }
+                } catch (error) {}
                 setIsUploading(false);
             };
 
@@ -247,161 +262,132 @@
                 ctx.beginPath();
             };
 
-            // --- UI Helpers ---
             const isConnected = connectionStatus === 'CONNECTED';
             const statusStyles = {
-                'DISCONNECTED': { color: 'bg-red-500', text: 'DISCONNECTED' },
-                'CONNECTING': { color: 'bg-yellow-500', text: 'CONNECTING...', extra: 'animate-pulse' },
-                'CONNECTED': { color: 'bg-cyan-400', text: 'LINK ESTABLISHED' },
+                'DISCONNECTED': { color: 'bg-zinc-600', text: 'OFFLINE // NO SIGNAL' },
+                'CONNECTING': { color: 'bg-yellow-600', text: 'NEGOTIATING LINK...', extra: 'animate-pulse' },
+                'CONNECTED': { color: 'bg-blue-500', text: 'LINK ESTABLISHED' },
             };
             const currentStatus = statusStyles[connectionStatus];
 
             return (
-                <div className="min-h-screen text-[#ededed] font-sans flex flex-col items-center p-6 pb-20">
+                <div className="min-h-screen flex flex-col items-center p-6 pb-20">
                     
-                    <header className="w-full max-w-md text-center mt-4 mb-8">
-                        <h1 className="text-3xl font-bold tracking-widest text-white uppercase flex items-center justify-center gap-3">
-                            <Activity className="text-cyan-400" size={28} />
-                            Maximalist
+                    <header className="w-full max-w-md mt-4 mb-8 flex justify-between items-center">
+                        <h1 className="text-sm font-bold tracking-widest text-zinc-100 uppercase flex items-center gap-3 font-mono">
+                            <Activity className="text-blue-500" size={18} />
+                            MAXIMALIST PORTAL
                         </h1>
+                        <a href="index.html" className="text-xs text-zinc-400 hover:text-white font-mono transition-colors">← Back</a>
                     </header>
 
-                    <main className="w-full max-w-md space-y-6">
+                    <main className="w-full max-w-md space-y-4">
                         
                         {/* Status Panel */}
-                        <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6 flex flex-col items-center">
-                            <div className={`w-4 h-4 rounded-full ${currentStatus.color} ${currentStatus.extra || ''} mb-4`}></div>
-                            <p className="text-sm font-mono text-gray-400 mb-4">{currentStatus.text}</p>
+                        <div className="bg-panel border border-borderline rounded-lg p-6 flex flex-col items-center">
+                            <div className={`w-3 h-3 rounded-full ${currentStatus.color} ${currentStatus.extra || ''} mb-3`}></div>
+                            <p className="text-xs font-mono text-zinc-400 mb-4">{currentStatus.text}</p>
                             {!isConnected ? (
-                                <button onClick={connectBLE} disabled={connectionStatus === 'CONNECTING'} className="w-full bg-cyan-600 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2">
-                                    <Bluetooth size={20} /> Establish Link
+                                <button onClick={connectBLE} disabled={connectionStatus === 'CONNECTING'} className="w-full bg-zinc-100 hover:bg-white text-zinc-900 font-bold py-3 px-4 rounded-md flex items-center justify-center gap-2 transition-colors text-sm">
+                                    <Bluetooth size={18} /> Establish Hardware Link
                                 </button>
                             ) : (
-                                <button onClick={disconnectBLE} className="w-full bg-red-900/50 text-red-200 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2">
-                                    <BluetoothOff size={20} /> Sever Link
+                                <button onClick={disconnectBLE} className="w-full bg-transparent border border-borderline hover:border-red-500/50 hover:bg-red-950/20 text-zinc-300 font-bold py-3 px-4 rounded-md flex items-center justify-center gap-2 transition-all text-sm">
+                                    <BluetoothOff size={18} /> Sever Link
                                 </button>
                             )}
                         </div>
 
-                        <div className={`space-y-6 transition-all duration-500 ${!isConnected ? 'opacity-30 pointer-events-none grayscale' : 'opacity-100'}`}>
+                        <div className={`space-y-4 transition-all duration-500 ${!isConnected ? 'opacity-40 pointer-events-none grayscale' : 'opacity-100'}`}>
                             
-                            {/* Theme & Aura Setup */}
-                            <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6">
-                                <h2 className="text-xs font-mono text-cyan-400 mb-4 uppercase flex items-center gap-2"><PaintBucket size={14} /> Aura Configuration</h2>
-                                <div className="flex gap-3 mb-4 items-center">
+                            {/* Theme Setup */}
+                            <div className="bg-panel border border-borderline rounded-lg p-5">
+                                <h2 className="text-xs font-mono text-zinc-400 mb-4 uppercase flex items-center gap-2"><PaintBucket size={14} /> Aura Matrix</h2>
+                                <div className="flex gap-3 mb-3 items-center">
                                     <input 
-                                        type="color" 
-                                        value={auraColor}
-                                        onChange={(e) => setAuraColor(e.target.value)}
-                                        className="w-12 h-12 rounded-lg bg-black border border-gray-700 cursor-pointer"
+                                        type="color" value={auraColor} onChange={(e) => setAuraColor(e.target.value)}
+                                        className="w-10 h-10 rounded-md bg-black border border-borderline cursor-pointer"
                                     />
-                                    <button 
-                                        onClick={applyAuraColor}
-                                        className="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-xl transition-all border border-gray-700 hover:border-cyan-500 text-xs tracking-wider"
-                                    >
-                                        APPLY TO MATRIX RING
+                                    <button onClick={applyAuraColor} className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold py-2.5 px-4 rounded-md transition-all border border-borderline text-xs tracking-wider">
+                                        PUSH COLOR
                                     </button>
                                 </div>
-                                <button onClick={() => sendCommand(9)} className="w-full bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex items-center justify-center gap-2 border border-transparent hover:border-gray-500 transition-all">
-                                    <div className="w-4 h-4 rounded-full" style={{backgroundColor: auraColor}}></div>
-                                    <span className="text-xs font-mono text-gray-300">LAUNCH SOLID AURA SCREEN</span>
+                                <button onClick={() => sendCommand(9)} className="w-full bg-transparent border border-borderline hover:border-zinc-500 rounded-md py-2.5 flex items-center justify-center gap-2 transition-all">
+                                    <div className="w-3 h-3 rounded-full" style={{backgroundColor: auraColor}}></div>
+                                    <span className="text-xs font-mono text-zinc-300">LAUNCH SOLID AURA</span>
                                 </button>
                             </div>
 
                             {/* System Faces */}
-                            <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6">
-                                <h2 className="text-xs font-mono text-cyan-400 mb-4 uppercase flex items-center gap-2"><Activity size={14} /> Matrix</h2>
-                                <div className="grid grid-cols-3 gap-3 mb-4">
-                                    <button onClick={() => sendCommand(0)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceNeutral className="text-cyan-400" size={24} /><span className="text-[10px]">NEUTRAL</span></button>
-                                    <button onClick={() => sendCommand(1)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceHappy className="text-cyan-400" size={24} /><span className="text-[10px]">HAPPY</span></button>
-                                    <button onClick={() => sendCommand(2)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceSleepy className="text-gray-400" size={24} /><span className="text-[10px]">REST</span></button>
-                                    <button onClick={() => sendCommand(3)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceAngry className="text-red-500" size={24} /><span className="text-[10px]">ANGRY</span></button>
-                                    <button onClick={() => sendCommand(4)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceVisor className="text-magenta-500" size={24} /><span className="text-[10px]">VISOR</span></button>
-                                    <button onClick={() => sendCommand(5)} className="bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex flex-col items-center gap-1"><FaceOptics className="text-cyan-400" size={24} /><span className="text-[10px]">OPTICS</span></button>
+                            <div className="bg-panel border border-borderline rounded-lg p-5">
+                                <h2 className="text-xs font-mono text-zinc-400 mb-4 uppercase flex items-center gap-2"><Activity size={14} /> Rendering Logic</h2>
+                                <div className="grid grid-cols-3 gap-2 mb-3">
+                                    <button onClick={() => sendCommand(0)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceNeutral className="text-zinc-400" size={20} /><span className="text-[10px] font-mono">NEUTRAL</span></button>
+                                    <button onClick={() => sendCommand(1)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceHappy className="text-blue-400" size={20} /><span className="text-[10px] font-mono">HAPPY</span></button>
+                                    <button onClick={() => sendCommand(2)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceSleepy className="text-zinc-500" size={20} /><span className="text-[10px] font-mono">REST</span></button>
+                                    <button onClick={() => sendCommand(3)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceAngry className="text-red-500" size={20} /><span className="text-[10px] font-mono">ANGRY</span></button>
+                                    <button onClick={() => sendCommand(4)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceVisor className="text-purple-400" size={20} /><span className="text-[10px] font-mono">VISOR</span></button>
+                                    <button onClick={() => sendCommand(5)} className="bg-zinc-900 border border-transparent hover:border-borderline rounded-md py-3 flex flex-col items-center gap-1.5 transition-all"><FaceOptics className="text-emerald-400" size={20} /><span className="text-[10px] font-mono">OPTICS</span></button>
                                 </div>
-                                <button onClick={() => sendCommand(7)} className="w-full bg-gray-800/80 hover:bg-gray-700 rounded-xl py-3 flex items-center justify-center gap-2"><Cpu className="text-orange-400" size={18} /><span className="text-xs">TELEMETRY</span></button>
+                                <button onClick={() => sendCommand(7)} className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-md py-2.5 flex items-center justify-center gap-2 transition-colors"><Cpu size={16} /><span className="text-xs font-semibold">TELEMETRY MODE</span></button>
                             </div>
 
                             {/* Canvas Module */}
-                            <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6">
-                                <h2 className="text-xs font-mono text-cyan-400 mb-4 uppercase flex items-center gap-2"><PenTool size={14} /> Draw Module</h2>
+                            <div className="bg-panel border border-borderline rounded-lg p-5">
+                                <h2 className="text-xs font-mono text-zinc-400 mb-4 uppercase flex items-center gap-2"><PenTool size={14} /> Draw Module</h2>
                                 
                                 <div className="flex justify-center mb-4">
                                     <canvas 
-                                        ref={canvasRef}
-                                        width={240} 
-                                        height={240}
-                                        className="bg-black rounded-full border-4 border-gray-800 cursor-crosshair touch-none"
-                                        onPointerDown={startDrawing}
-                                        onPointerMove={draw}
-                                        onPointerUp={stopDrawing}
-                                        onPointerOut={stopDrawing}
+                                        ref={canvasRef} width={240} height={240}
+                                        className="bg-black rounded-full border border-borderline cursor-crosshair touch-none"
+                                        onPointerDown={startDrawing} onPointerMove={draw} onPointerUp={stopDrawing} onPointerOut={stopDrawing}
                                     />
                                 </div>
 
-                                <div className="flex justify-between items-center bg-gray-900 p-3 rounded-xl mb-4">
+                                <div className="flex justify-between items-center bg-zinc-900 border border-borderline p-2.5 rounded-md mb-4">
                                     <div className="flex gap-2">
-                                        <button onClick={() => setBrushColor('#22d3ee')} className={`w-8 h-8 rounded-full bg-[#22d3ee] border-2 ${brushColor === '#22d3ee' ? 'border-white' : 'border-transparent'}`}></button>
-                                        <button onClick={() => setBrushColor('#d946ef')} className={`w-8 h-8 rounded-full bg-[#d946ef] border-2 ${brushColor === '#d946ef' ? 'border-white' : 'border-transparent'}`}></button>
-                                        <button onClick={() => setBrushColor('#ffffff')} className={`w-8 h-8 rounded-full bg-[#ffffff] border-2 ${brushColor === '#ffffff' ? 'border-gray-500' : 'border-transparent'}`}></button>
-                                        <button onClick={() => setBrushColor('#ef4444')} className={`w-8 h-8 rounded-full bg-[#ef4444] border-2 ${brushColor === '#ef4444' ? 'border-white' : 'border-transparent'}`}></button>
+                                        <button onClick={() => setBrushColor('#2563eb')} className={`w-7 h-7 rounded-full bg-blue-600 border-2 ${brushColor === '#2563eb' ? 'border-zinc-300' : 'border-transparent'}`}></button>
+                                        <button onClick={() => setBrushColor('#a855f7')} className={`w-7 h-7 rounded-full bg-purple-500 border-2 ${brushColor === '#a855f7' ? 'border-zinc-300' : 'border-transparent'}`}></button>
+                                        <button onClick={() => setBrushColor('#ffffff')} className={`w-7 h-7 rounded-full bg-white border-2 ${brushColor === '#ffffff' ? 'border-zinc-500' : 'border-transparent'}`}></button>
+                                        <button onClick={() => setBrushColor('#ef4444')} className={`w-7 h-7 rounded-full bg-red-500 border-2 ${brushColor === '#ef4444' ? 'border-zinc-300' : 'border-transparent'}`}></button>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button onClick={() => setBrushColor('#000000')} className={`p-2 rounded-lg bg-gray-800 ${brushColor === '#000000' ? 'text-white' : 'text-gray-400'}`}><Eraser size={18} /></button>
-                                        <button onClick={clearCanvas} className="p-2 text-red-400 text-xs font-bold bg-red-900/30 rounded-lg">CLEAR</button>
+                                        <button onClick={() => setBrushColor('#000000')} className={`p-1.5 rounded bg-zinc-800 ${brushColor === '#000000' ? 'text-white' : 'text-zinc-500'}`}><Eraser size={16} /></button>
+                                        <button onClick={clearCanvas} className="px-2 text-zinc-400 hover:text-red-400 text-[10px] font-mono border border-borderline rounded">CLEAR</button>
                                     </div>
                                 </div>
 
-                                <button 
-                                    onClick={() => streamToKeychain(canvasRef.current)} 
-                                    disabled={isUploading}
-                                    className="w-full bg-cyan-900/50 border border-cyan-500 text-cyan-400 rounded-xl py-3 flex items-center justify-center gap-2"
-                                >
-                                    <Send size={18} /> {isUploading ? 'STREAMING...' : 'PUSH CANVAS TO SCREEN'}
+                                <button onClick={() => streamToKeychain(canvasRef.current)} disabled={isUploading} className="w-full bg-zinc-100 hover:bg-white text-black font-semibold rounded-md py-2.5 flex items-center justify-center gap-2 transition-colors text-xs">
+                                    <Send size={16} /> {isUploading ? 'STREAMING DATA...' : 'PUSH CANVAS'}
                                 </button>
                                 
-                                <div className="mt-4 pt-4 border-t border-white/10">
+                                <div className="mt-3 pt-3 border-t border-borderline">
                                     <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleImageUpload} />
-                                    <button onClick={() => fileInputRef.current.click()} className="w-full bg-gray-800 text-gray-300 rounded-xl py-3 flex items-center justify-center gap-2">
-                                        <ImageUploadIcon size={18} /> UPLOAD PHOTO
+                                    <button onClick={() => fileInputRef.current.click()} className="w-full bg-transparent hover:bg-zinc-900 border border-borderline text-zinc-300 rounded-md py-2.5 flex items-center justify-center gap-2 text-xs transition-colors">
+                                        <ImageUploadIcon size={16} /> UPLOAD PHOTO
                                     </button>
                                 </div>
                             </div>
                             
                             {/* Device Configuration */}
-                            <div className="bg-[#1e1e1e]/60 border border-white/10 rounded-2xl p-6">
-                                <h3 className="text-[10px] font-mono text-gray-400 mb-3 uppercase tracking-widest">System Configuration</h3>
-                                <div className="flex gap-2 mb-4">
+                            <div className="bg-panel border border-borderline rounded-lg p-5">
+                                <h3 className="text-[10px] font-mono text-zinc-500 mb-3 uppercase tracking-widest">Configuration</h3>
+                                <div className="flex gap-2 mb-3">
                                     <input 
-                                        type="text" 
-                                        maxLength="16" 
-                                        value={newDeviceName}
-                                        onChange={(e) => setNewDeviceName(e.target.value)}
-                                        placeholder="RENAME DEVICE..." 
-                                        className="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-500 text-white placeholder-gray-600 font-mono text-sm uppercase"
+                                        type="text" maxLength="16" value={newDeviceName} onChange={(e) => setNewDeviceName(e.target.value)} placeholder="RENAME DEVICE..." 
+                                        className="w-full bg-zinc-900 border border-borderline rounded-md px-3 py-2.5 focus:outline-none focus:border-blue-500 text-white placeholder-zinc-600 font-mono text-xs uppercase transition-colors"
                                     />
-                                    <button 
-                                        onClick={renameDevice}
-                                        className="bg-gray-800 hover:bg-cyan-900 text-cyan-400 font-bold px-4 rounded-xl transition-all border border-gray-700 hover:border-cyan-500 text-xs"
-                                    >
+                                    <button onClick={renameDevice} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-semibold px-4 rounded-md transition-colors border border-borderline text-xs">
                                         APPLY
                                     </button>
                                 </div>
-                                <div className="flex gap-2 border-t border-white/10 pt-4 mt-2">
+                                <div className="flex gap-2 border-t border-borderline pt-3">
                                     <input 
-                                        type="text" 
-                                        maxLength="24" 
-                                        value={inputText}
-                                        onChange={(e) => setInputText(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && sendText()}
-                                        placeholder="PUSH MESSAGE..." 
-                                        className="w-full bg-black/50 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-magenta-500 text-white placeholder-gray-600 font-mono text-sm"
+                                        type="text" maxLength="24" value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendText()} placeholder="PAYLOAD MESSAGE..." 
+                                        className="w-full bg-zinc-900 border border-borderline rounded-md px-3 py-2.5 focus:outline-none focus:border-blue-500 text-white placeholder-zinc-600 font-mono text-xs transition-colors"
                                     />
-                                    <button 
-                                        onClick={sendText}
-                                        className="bg-gray-800 hover:bg-gray-700 text-white px-5 rounded-xl transition-all flex items-center justify-center border border-gray-700 hover:border-magenta-500"
-                                    >
-                                        <Send size={20} />
+                                    <button onClick={sendText} className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-md transition-colors flex items-center justify-center">
+                                        <Send size={16} />
                                     </button>
                                 </div>
                             </div>
