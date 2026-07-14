@@ -1,26 +1,32 @@
+Here is a completely redesigned, single-file production-ready `index.html`. This architecture shifts the entire platform into a clean, unified **Technical Engineering Dashboard**.
+
+The aesthetic is strictly anchored to a premium **Industrial Utility design system** using structured grid borders, deep charcoal planes, a slate/cobalt functional accent color, and absolute zero neon/cyberpunk elements.
+
+The page features an interactive, real-time **Circular Canvas Drawing Matrix**, an architectural board comparison engine, and an implementation lifecycle roadmap.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maximalist Labs // Hardware Hub</title>
+  <title>Maximalist Labs // System Console</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- INDUSTRIAL DESIGN SYSTEM --- */
+    /* --- INDUSTRIAL DESIGN CORE SYSTEM --- */
     :root {
       --bg: #09090b;
       --panel-bg: #121214;
       --panel-border: #27272a;
       --border-hover: #3f3f46;
-      --accent: #2563eb; /* Clean industrial cobalt blue */
-      --accent-dim: rgba(37, 99, 235, 0.1);
+      --accent: #3b82f6; /* Functional Cobalt */
       --text: #f4f4f5;
       --text-muted: #8e8e93;
-      --terminal-bg: #030303;
+      --canvas-bg: #18181b;
     }
 
     * {
@@ -34,24 +40,22 @@
       color: var(--text);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    /* --- NAVIGATION --- */
+    /* --- LAYOUT PIPELINE --- */
     header {
-      border-b: 1px solid var(--panel-border);
-      background-color: rgba(9, 9, 11, 0.8);
-      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--panel-border);
+      background-color: var(--panel-bg);
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 100;
     }
 
     .nav-container {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -60,20 +64,19 @@
     .brand {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      color: var(--text);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
     }
 
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 1.75rem;
     }
 
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       transition: color 0.2s;
     }
@@ -82,42 +85,40 @@
       color: var(--text);
     }
 
-    /* --- LAYOUT GRID --- */
     main {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
-      padding: 3rem 1.5rem;
+      padding: 2.5rem 1.5rem;
     }
 
-    .hero-section {
-      margin-bottom: 4rem;
-      max-width: 650px;
+    /* --- SECTION HEADERS --- */
+    .section-header {
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--panel-border);
     }
 
-    .hero-section h1 {
-      font-size: 2.75rem;
-      font-weight: 700;
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
       letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 1rem;
     }
 
-    .hero-section p {
+    .section-header p {
       color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.6;
+      font-size: 0.85rem;
     }
 
-    /* --- DASHBOARD DEMO WORKSPACE --- */
-    .workspace-grid {
+    /* --- WORKSPACE LAYOUT (CONTROL PANEL) --- */
+    .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
       margin-bottom: 4rem;
     }
 
-    @media (min-width: 968px) {
-      .workspace-grid {
+    @media (min-width: 1024px) {
+      .dashboard-grid {
         grid-template-columns: 7fr 5fr;
       }
     }
@@ -125,85 +126,108 @@
     .panel {
       background-color: var(--panel-bg);
       border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
+      border-radius: 8px;
+      padding: 1.5rem;
     }
 
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--panel-border);
+    .panel-title-area {
+      margin-bottom: 1.25rem;
     }
 
     .panel-title {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
     }
 
-    .panel-subtitle {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+    .panel-desc {
       color: var(--text-muted);
+      font-size: 0.75rem;
     }
 
-    /* --- DASHBOARD UI COMPONENTS --- */
-    .dashboard-ui {
+    /* --- CONTROL COMPONENTS --- */
+    .control-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 1rem;
-      flex-grow: 1;
+      margin-bottom: 1.25rem;
     }
 
-    .control-group {
+    @media (min-width: 640px) {
+      .control-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .input-wrapper {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.35rem;
     }
 
     label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    .custom-select, .btn-action, .input-field {
-      width: 100%;
+    .form-input, .form-select {
       background-color: var(--bg);
       border: 1px solid var(--panel-border);
       color: var(--text);
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      border-radius: 5px;
       font-family: inherit;
       font-size: 0.85rem;
       outline: none;
       transition: border-color 0.2s;
     }
 
-    .custom-select:focus, .input-field:focus {
+    .form-input:focus, .form-select:focus {
       border-color: var(--border-hover);
     }
 
-    .btn-action {
-      background-color: var(--text);
-      color: var(--bg);
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid transparent;
+    /* Interactive Canvas Elements */
+    .canvas-container {
+      background-color: var(--canvas-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 1rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
+      gap: 1rem;
     }
 
-    .btn-action:hover {
+    .drawing-board {
+      background-color: #000;
+      border: 1px solid var(--panel-border);
+      border-radius: 50%; /* Masked circularly to match the 1.28" LCD profile */
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      background-color: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
       background-color: #e4e4e7;
     }
 
@@ -218,134 +242,66 @@
       border-color: var(--border-hover);
     }
 
-    /* --- VIRTUAL HARDWARE SCREEN VIEW --- */
-    .display-preview-box {
+    /* Hardware Simulator Visualizer */
+    .visualizer-pane {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       background-color: var(--bg);
       border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 2rem;
-      min-height: 240px;
+      border-radius: 6px;
+      padding: 2.5rem;
+      height: 100%;
+      min-height: 350px;
     }
 
-    .hardware-screen {
-      width: 160px;
-      height: 160px;
+    .hardware-chassis {
+      width: 220px;
+      height: 220px;
+      background-color: #1c1c1e;
+      border: 2px solid #3a3a3c;
       border-radius: 50%;
-      background-color: #000;
-      border: 6px solid #2d2d30;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .lcd-viewport {
+      width: 180px;
+      height: 180px;
+      background-color: #000;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      overflow: hidden;
     }
 
-    .screen-content {
-      text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: #fff;
-      z-index: 2;
-    }
-
-    .screen-face {
-      font-size: 1.5rem;
-      margin-bottom: 0.25rem;
-    }
-
-    /* --- INTEGRATED ESP FLASHER --- */
-    .flasher-layout {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      height: 100%;
-    }
-
-    .chip-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    .chip-option {
-      border: 1px solid var(--panel-border);
-      background-color: var(--bg);
-      padding: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-    }
-
-    .chip-option.active {
-      border-color: var(--text);
-      background-color: rgba(255,255,255,0.02);
-    }
-
-    .chip-option h4 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.15rem;
-    }
-
-    .chip-option p {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .progress-bar-container {
+    .lcd-canvas-mirror {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: 6px;
-      background-color: var(--bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 0.5rem;
-    }
-
-    .progress-fill {
-      width: 0%;
       height: 100%;
-      background-color: var(--text);
-      transition: width 0.1s linear;
+      pointer-events: none;
     }
 
-    .terminal-console {
-      background-color: var(--terminal-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
+    .lcd-text-overlay {
+      position: relative;
+      z-index: 10;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.75rem;
-      color: #a1a1aa;
-      height: 120px;
-      overflow-y: auto;
-      white-space: pre-wrap;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+      pointer-events: none;
     }
 
-    /* --- HARDWARE CONFIGURATION PLANS (NO PCB) --- */
-    .section-title-wrapper {
-      margin-bottom: 2rem;
-    }
-
-    .section-title-wrapper h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .section-title-wrapper p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .plans-grid {
+    /* --- BOARD ARCHITECTURE ANALYSIS --- */
+    .architecture-container {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
@@ -353,151 +309,180 @@
     }
 
     @media (min-width: 768px) {
-      .plans-grid {
+      .architecture-container {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    .plan-card {
+    .arch-card {
       background-color: var(--panel-bg);
       border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 2rem;
+      border-radius: 8px;
+      padding: 1.75rem;
     }
 
-    .plan-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      border: 1px solid var(--panel-border);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      width: fit-content;
-      margin-bottom: 1rem;
-    }
-
-    .plan-card h3 {
-      font-size: 1.35rem;
+    .arch-card h3 {
+      font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
-    .plan-card p {
+    .arch-card p {
       color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .spec-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
       font-size: 0.85rem;
-      border-top: 1px solid var(--panel-border);
-      padding-top: 1.25rem;
+      margin-bottom: 1.25rem;
     }
 
-    .spec-list li {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text);
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
     }
 
-    .spec-list li span:last-child {
+    .spec-table tr {
+      border-bottom: 1px solid rgba(63, 63, 70, 0.3);
+    }
+
+    .spec-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .spec-table td {
+      padding: 0.6rem 0;
+    }
+
+    .spec-table td:last-child {
+      text-align: right;
       font-family: 'JetBrains Mono', monospace;
       color: var(--text-muted);
     }
 
-    /* --- DOWNLOADS / COMING SOON --- */
-    .coming-soon-grid {
+    /* --- ROADMAP TIMELINE --- */
+    .roadmap-track {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 4rem;
+    }
+
+    .roadmap-node {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .node-index {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background-color: var(--bg);
+      border: 1px solid var(--panel-border);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    .node-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .node-content p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* --- CONVERSIONS / FILE LINKS --- */
+    .file-lock-flex {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1rem;
       margin-bottom: 4rem;
     }
 
-    @media (min-width: 768px) {
-      .coming-soon-grid {
+    @media (min-width: 640px) {
+      .file-lock-flex {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    .disabled-card {
-      background-color: rgba(18, 18, 20, 0.2);
+    .locked-card {
       border: 1px dashed var(--panel-border);
-      border-radius: 12px;
       padding: 1.5rem;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      opacity: 0.6;
+      background-color: rgba(18,18,20,0.2);
     }
 
-    .disabled-meta h4 {
-      font-size: 0.9rem;
+    .locked-card text-group h5 {
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text);
     }
 
-    .disabled-meta p {
+    .locked-card text-group p {
       font-size: 0.75rem;
       color: var(--text-muted);
     }
 
-    .lock-tag {
+    .lock-pill {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: rgba(255,255,255,0.05);
-      padding: 0.25rem 0.6rem;
+      font-size: 0.65rem;
+      background-color: rgba(255,255,255,0.05);
+      padding: 0.25rem 0.5rem;
       border-radius: 4px;
       color: var(--text-muted);
+      text-transform: uppercase;
     }
 
-    /* --- INTEREST FORM --- */
-    .form-panel {
+    /* --- GENERAL INTEREST SIGNUP --- */
+    .signup-wrapper {
       background-color: var(--panel-bg);
       border: 1px solid var(--panel-border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 2.5rem;
       text-align: center;
-      max-width: 600px;
+      max-width: 550px;
       margin: 0 auto;
     }
 
-    .form-panel h3 {
-      font-size: 1.5rem;
+    .signup-wrapper h3 {
+      font-size: 1.25rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
 
-    .form-panel p {
+    .signup-wrapper p {
       color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 1.75rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
     }
 
-    .input-inline-group {
+    .form-inline {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      max-width: 450px;
-      margin: 0 auto;
+      gap: 0.5rem;
     }
 
     @media (min-width: 480px) {
-      .input-inline-group {
+      .form-inline {
         flex-direction: row;
-        gap: 0.5rem;
       }
+    }
+
+    .form-inline .form-input {
+      flex: 1;
     }
 
     footer {
       border-top: 1px solid var(--panel-border);
-      padding: 2.5rem 1.5rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
@@ -512,266 +497,294 @@
     <div class="nav-container">
       <div class="brand">MAXIMALIST LABS</div>
       <nav class="nav-links">
-        <a href="#dashboard">Demo Dashboard</a>
-        <a href="#flasher">ESP Flasher</a>
-        <a href="#wiring">Wiring Plans</a>
-        <a href="#files">Files</a>
+        <a href="#panel">Console</a>
+        <a href="#hardware">Architecture</a>
+        <a href="#roadmap">Pipeline</a>
+        <a href="#files">Repository</a>
       </nav>
     </div>
   </header>
 
   <main>
     
-    <section class="hero-section">
-      <h1>Hardware Control Center</h1>
-      <p>Configure, test, and program your compact wearable system architectures directly from the browser. Switch platforms natively using integrated WebSerial flashing controllers.</p>
+    <section class="section-header" id="panel">
+      <h2>Peripheral Verification Interface</h2>
+      <p>Simulate, sketch, and map configuration matrices to your air-wired wearable displays in real-time.</p>
     </section>
 
-    <section class="workspace-grid" id="dashboard">
+    <div class="dashboard-grid">
       
       <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Interactive Device Workspace</div>
-          <div class="panel-subtitle">VIRTUAL_SESSION_ACTIVE</div>
+        <div class="panel-title-area">
+          <div class="panel-title">Console Diagnostics</div>
+          <div class="panel-desc">Configure active state telemetry parameters</div>
         </div>
-        
-        <div class="dashboard-ui">
-          <div class="control-group" style="grid-column: 1 / -1; margin-bottom: 0.5rem;">
-            <div class="display-preview-box">
-              <div class="hardware-screen" id="virtualScreen">
-                <div class="screen-content">
-                  <div class="screen-face" id="faceIcon">👁</div>
-                  <div id="statusLabel">Telemetry</div>
-                  <div style="font-size: 0.6rem; color: #8e8e93; margin-top: 2px;" id="modeValue">3.3V Norm</div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="control-group">
-            <label for="faceSelector">Face Render Logic</label>
-            <select id="faceSelector" class="custom-select" onchange="updateVirtualScreen()">
-              <option value="eye">Default Telemetry (Eye)</option>
-              <option value="smile">Companion Mode (Smile)</option>
-              <option value="matrix">Data Stream (Pulse)</option>
+        <div class="control-row">
+          <div class="input-wrapper">
+            <label for="textStreamInput">Text Payload Stream</label>
+            <input type="text" id="textStreamInput" class="form-input" value="SYS_ACTIVE" oninput="syncVisualizer()" />
+          </div>
+          <div class="input-wrapper">
+            <label for="baudRateSelect">Data Bus Frequency</label>
+            <select id="baudRateSelect" class="form-select">
+              <option value="115200">115200 baud (Standard)</option>
+              <option value="921600">921600 baud (High-Speed)</option>
             </select>
           </div>
+        </div>
 
-          <div class="control-group">
-            <label for="textUploader">Custom Text Stream</label>
-            <input type="text" id="textUploader" class="input-field" value="Telemetry" placeholder="Enter output matrix array text..." oninput="updateTextLabel()" />
+        <div class="input-wrapper" style="margin-bottom: 0.75rem;">
+          <label>Matrix Drawing Stream (Circular Crop)</label>
+        </div>
+        
+        <div class="canvas-container">
+          <canvas id="paintCanvas" class="drawing-board" width="180" height="180"></canvas>
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+            <button class="btn" onclick="triggerFirmwareAlert()">Verify Stream Payload</button>
           </div>
         </div>
       </div>
 
-      <div class="panel" id="flasher">
-        <div class="panel-header">
-          <div class="panel-title">WebSerial Firmware Deployment</div>
-          <div class="panel-subtitle">SYSTEM_READY</div>
+      <div class="panel">
+        <div class="panel-title-area">
+          <div class="panel-title">Virtual Hardware Visualizer</div>
+          <div class="panel-desc">Real-time rendering mirror of air-wired 1.28" LCD configuration</div>
         </div>
-        
-        <div class="flasher-layout">
-          <label>Target Controller Profile</label>
-          <div class="chip-selector">
-            <div class="chip-option active" id="chipS3" onclick="selectChip('S3')">
-              <h4>ESP32-S3 Mini</h4>
-              <p>2MB PSRAM Array</p>
+
+        <div class="visualizer-pane">
+          <div class="hardware-chassis">
+            <div class="lcd-viewport">
+              <canvas id="hardwareMirrorCanvas" class="lcd-canvas-mirror" width="180" height="180"></canvas>
+              <div class="lcd-text-overlay" id="lcdTextDisplay">SYS_ACTIVE</div>
             </div>
-            <div class="chip-option" id="chipC3" onclick="selectChip('C3')">
-              <h4>ESP32-C3 Mini</h4>
-              <p>Standard Core</p>
-            </div>
           </div>
-
-          <button class="btn-action" id="flashBtn" onclick="runMockFlash()">
-            Deploy Core Firmware
-          </button>
-
-          <div class="progress-bar-container">
-            <div class="progress-fill" id="flashProgress"></div>
-          </div>
-
-          <label>Console Diagnostic Yield</label>
-          <div class="terminal-console" id="terminalOutput">Awaiting deployment execution signal...</div>
         </div>
       </div>
 
+    </div>
+
+    <section class="section-header" id="hardware">
+      <h2>Direct-Wired Component Infrastructure</h2>
+      <p>Analysis of direct component pin-mapping configurations without custom PCB layers.</p>
     </section>
 
-    <section class="section-title-wrapper" id="wiring">
-      <h2>Air-Wired Architecture Layouts</h2>
-      <p>Direct component pin-mapping guidelines without custom PCB integration requirements.</p>
-    </section>
-
-    <section class="plans-grid">
+    <div class="architecture-container">
       
-      <div class="plan-card">
-        <div class="plan-badge">HIGH PERFORMANCE</div>
-        <h3>S3 Mini Direct Integration</h3>
-        <p>Optimized for deep-buffer frame transformations and live canvas data streams over Bluetooth LE pipelines.</p>
-        
-        <ul class="spec-list">
-          <li><span>Microcontroller</span> <span>ESP32-S3 Mini</span></li>
-          <li><span>Memory Layout</span> <span>2MB PSRAM // 4MB Flash</span></li>
-          <li><span>Display Pipeline</span> <span>Hardware SPI (Pins 7, 9, 44)</span></li>
-          <li><span>Battery Protection</span> <span>Inline 1S Wire Module (Required)</span></li>
-          <li><span>Interconnect Method</span> <span>Air-Wired Solder Bridge // No PCB</span></li>
-        </ul>
+      <div class="arch-card">
+        <h3>ESP32-S3 Mini Configuration</h3>
+        <p>Engineered for complex real-time frame buffer allocation and high-throughput data parsing loops.</p>
+        <table class="spec-table">
+          <tr><td>Processing Unit</td><td>Dual-Core Xtensa LX7 @ 160MHz</td></tr>
+          <tr><td>Memory Profile</td><td>2MB PSRAM // 4MB Flash Memory</td></tr>
+          <tr><td>Canvas Buffer Cap</td><td>High Headroom (Supports multi-frame caching)</td></tr>
+          <tr><td>Power Mitigation</td><td>Requires External Inline 1S Protection Board</td></tr>
+          <tr><td>Assembly Layout</td><td>Direct Point-to-Point Air-Wired Solder Bridge</td></tr>
+        </table>
       </div>
 
-      <div class="plan-card">
-        <div class="plan-badge">POWER CONSERVATIVE</div>
-        <h3>C3 Mini Direct Integration</h3>
-        <p>A compact, streamlined profile ideal for simple text tracking arrays, telemetry output, and maximum battery cycle lifespans.</p>
-        
-        <ul class="spec-list">
-          <li><span>Microcontroller</span> <span>ESP32-C3 Mini</span></li>
-          <li><span>Memory Layout</span> <span>400KB SRAM // 4MB Flash</span></li>
-          <li><span>Display Pipeline</span> <span>Standard SPI Configuration</span></li>
-          <li><span>Battery Protection</span> <span>Inline 1S Wire Module (Required)</span></li>
-          <li><span>Interconnect Method</span> <span>Air-Wired Solder Bridge // No PCB</span></li>
-        </ul>
+      <div class="arch-card">
+        <h3>ESP32-C3 Mini Configuration</h3>
+        <p>Optimized for lightweight numeric array tracking, simple telemetry readouts, and minimized power states.</p>
+        <table class="spec-table">
+          <tr><td>Processing Unit</td><td>Single-Core RISC-V @ 160MHz</td></tr>
+          <tr><td>Memory Profile</td><td>400KB SRAM // 4MB Flash Memory</td></tr>
+          <tr><td>Canvas Buffer Cap</td><td>Constrained (Requires fine array compression)</td></tr>
+          <tr><td>Power Mitigation</td><td>Requires External Inline 1S Protection Board</td></tr>
+          <tr><td>Assembly Layout</td><td>Direct Point-to-Point Air-Wired Solder Bridge</td></tr>
+        </table>
       </div>
 
+    </div>
+
+    <section class="section-header" id="roadmap">
+      <h2>System Lifecycle & Implementation Roadmap</h2>
+      <p>The structured execution protocol from raw development nodes to active daily operation.</p>
     </section>
 
-    <section class="section-title-wrapper" id="files">
-      <h2>System Source Profiles</h2>
-      <p>Access CAD structural geometry files and structural source models.</p>
-    </section>
-
-    <section class="coming-soon-grid">
+    <div class="roadmap-track">
       
-      <div class="disabled-card">
+      <div class="roadmap-node">
+        <div class="node-index">01</div>
+        <div class="node-content">
+          <h4>Air-Wired Harness Integration</h4>
+          <p>Bridge the chosen mini controller (S3 or C3) directly to the circular 1.28" display via its hardware SPI pin configuration. Install an inline 1S protection circuit board directly onto the LiPo battery wiring rail to govern low-voltage cutoffs safely.</p>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-index">02</div>
+        <div class="node-content">
+          <h4>WebBrowser Firmware Flashing</h4>
+          <p>Connect the hardware node via a standard USB-C cable. Use our upcoming integrated WebSerial flashing client to compile and write the core runtime binary assets to the chip directly out of Google Chrome—no external programming environment required.</p>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-index">03</div>
+        <div class="node-content">
+          <h4>Local Controller Initialization</h4>
+          <p>Once rebooted, the hardware initializes its local Bluetooth Low Energy (BLE) services, configuring internal non-volatile storage sectors to safely preserve operational parameters through full system restarts.</p>
+        </div>
+      </div>
+
+      <div class="roadmap-node">
+        <div class="node-index">04</div>
+        <div class="node-content">
+          <h4>Active Telemetry Execution</h4>
+          <p>Bond your web browser console to the live node. Stream custom vector sketches, update dashboard readout string metrics, and scale display features seamlessly on the fly.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="section-header" id="files">
+      <h2>Asset Repository Download Library</h2>
+      <p>Access structural parameters and core execution files.</p>
+    </section>
+
+    <div class="file-lock-flex">
+      <div class="locked-card">
         <div class="disabled-meta">
-          <h4>3D Case Models (.STL)</h4>
-          <p>Enclosure layout tolerances optimized for direct-wired components.</p>
+          <h5>Enclosure File Package (.STL)</h5>
+          <p>Compact form factor geometry built for loose component spacing.</p>
         </div>
-        <div class="lock-tag">Coming Soon</div>
+        <div class="lock-pill">Coming Soon</div>
       </div>
-
-      <div class="disabled-card">
+      <div class="locked-card">
         <div class="disabled-meta">
-          <h4>Source Logic Repository</h4>
-          <p>Full firmware script frameworks and canvas configuration profiles.</p>
+          <h5>Core Firmware Source Layout</h5>
+          <p>Complete script packages handling display mapping drivers and BLE pipes.</p>
         </div>
-        <div class="lock-tag">Coming Soon</div>
+        <div class="lock-pill">Coming Soon</div>
       </div>
+    </div>
 
-    </section>
-
-    <section class="form-panel">
-      <h3>Secure Production Launch Access</h3>
-      <p>Drop your email to receive system alerts, configuration documentation updates, and immediate access to hardware kits.</p>
-      
-      <form onsubmit="handleForm(event)">
-        <div class="input-inline-group">
-          <input type="email" id="userEmail" class="input-field" placeholder="Enter email address..." required />
-          <button type="submit" class="btn-action" style="max-width: 140px;">Join Waitlist</button>
+    <section class="signup-wrapper">
+      <h3>System Launch Registries</h3>
+      <p>Provide your contact email below to receive technical documentation alerts, hardware configuration releases, and early kit deployment notices.</p>
+      <form onsubmit="handleWaitlistSubmit(event)">
+        <div class="form-inline">
+          <input type="email" id="waitlistEmail" class="form-input" placeholder="Enter engineering contact email..." required />
+          <button type="submit" class="btn" style="max-width: 150px;">Log Access</button>
         </div>
       </form>
-      <div id="formSuccess" style="margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #a1a1aa; display: none;">
-        [✓] Address successfully logged in system registry.
+      <div id="waitlistFeedback" style="display: none; margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted);">
+        [✓] System address logged in waitlist registry.
       </div>
     </section>
 
   </main>
 
   <footer>
-    &copy; 2026 MAXIMALIST LABS. HARDWARE ARCHITECTURE PLATFORM.
+    &copy; 2026 MAXIMALIST LABS. HARDWARE CONSOLE ECOSYSTEM.
   </footer>
 
   <script>
-    let selectedChipType = 'S3';
+    const canvas = document.getElementById('paintCanvas');
+    const ctx = canvas.getContext('2d');
+    const mirrorCanvas = document.getElementById('hardwareMirrorCanvas');
+    const mCtx = mirrorCanvas.getContext('2d');
+    
+    let isDrawing = false;
 
-    // Update Text on the Hardware Simulation Display
-    function updateTextLabel() {
-      const inputVal = document.getElementById('textUploader').value;
-      const label = document.getElementById('statusLabel');
-      label.textContent = inputVal ? inputVal : '...';
+    // Initialize Canvas Parameters to smooth monochrome specs
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    mCtx.strokeStyle = '#ffffff';
+    mCtx.lineWidth = 4;
+    mCtx.lineCap = 'round';
+    mCtx.lineJoin = 'round';
+
+    // Desktop Mouse Controls
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Mobile Touch Controls
+    canvas.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousedown', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }, { passive: true });
+
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
     }
 
-    // Toggle Visual rendering profile arrays
-    function updateVirtualScreen() {
-      const selection = document.getElementById('faceSelector').value;
-      const icon = document.getElementById('faceIcon');
-      const container = document.getElementById('virtualScreen');
+    function startDrawing(e) {
+      isDrawing = true;
+      const coords = getCanvasCoordinates(e);
+      ctx.beginPath();
+      ctx.moveTo(coords.x, coords.y);
       
-      if (selection === 'eye') {
-        icon.textContent = '👁';
-        container.style.borderColor = '#2d2d30';
-      } else if (selection === 'smile') {
-        icon.textContent = '◡̈';
-        container.style.borderColor = '#2563eb';
-      } else if (selection === 'matrix') {
-        icon.textContent = '⌁';
-        container.style.borderColor = '#3f3f46';
-      }
+      mCtx.beginPath();
+      mCtx.moveTo(coords.x, coords.y);
     }
 
-    // Handle deployment hardware architecture toggle switches
-    function selectChip(type) {
-      selectedChipType = type;
-      document.getElementById('chipS3').classList.remove('active');
-      document.getElementById('chipC3').classList.remove('active');
+    function draw(e) {
+      if (!isDrawing) return;
+      const coords = getCanvasCoordinates(e);
       
-      if(type === 'S3') {
-        document.getElementById('chipS3').classList.add('active');
-      } else {
-        document.getElementById('chipC3').classList.add('active');
-      }
-      
-      const consoleLog = document.getElementById('terminalOutput');
-      consoleLog.textContent = `Target profile architecture redefined to: ESP32-${type} Mini. Ready to flash.`;
+      ctx.lineTo(coords.x, coords.y);
+      ctx.stroke();
+
+      // Mirror the coordinate stream instantly to the virtual hardware preview element
+      mCtx.lineTo(coords.x, coords.y);
+      mCtx.stroke();
     }
 
-    // Integrated WebSerial Flasher Simulator Process Engine
-    function runMockFlash() {
-      const btn = document.getElementById('flashBtn');
-      const progress = document.getElementById('flashProgress');
-      const consoleLog = document.getElementById('terminalOutput');
-      
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      progress.style.width = '0%';
-      
-      consoleLog.textContent = `[INIT] Requesting WebSerial transmission access...\n`;
-      
-      setTimeout(() => {
-        consoleLog.textContent += `[SERIAL] Port opened successfully with ESP32-${selectedChipType} Mini via USB-C\n`;
-        consoleLog.textContent += `[CORE] Connection established. Entering bootloader mode...\n`;
-        consoleLog.textContent += `[MEM] Erasing flash sectors safely...\n`;
-        
-        let percentage = 0;
-        const interval = setInterval(() => {
-          percentage += 4;
-          progress.style.width = `${percentage}%`;
-          consoleLog.textContent = `[FLASH] Writing binaries to memory block: ${percentage}%\n`;
-          consoleLog.scrollTop = consoleLog.scrollHeight;
-          
-          if(percentage >= 100) {
-            clearInterval(interval);
-            consoleLog.textContent += `\n[SUCCESS] Flash binary verification confirmed.\n[BOOT] Rebooting chip node. Firmware running optimally.`;
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            
-            // Mirror state to display logic
-            document.getElementById('modeValue').textContent = `${selectedChipType} Core`;
-          }
-        }, 100);
-        
-      }, 1200);
+    function stopDrawing() {
+      isDrawing = false;
     }
 
-    // Capture Interest Signup Engine
-    function handleForm(e) {
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      mCtx.clearRect(0, 0, mirrorCanvas.width, mirrorCanvas.height);
+    }
+
+    // Sync Text Payload Box to LCD Interface Viewport
+    function syncVisualizer() {
+      const sourceText = document.getElementById('textStreamInput').value;
+      const targetDisplay = document.getElementById('lcdTextDisplay');
+      targetDisplay.textContent = sourceText ? sourceText : ' ';
+    }
+
+    function triggerFirmwareAlert() {
+      alert("[DATA BUS] Stream packet arrays compiled. Verified ready for WebSerial transmission.");
+    }
+
+    function handleWaitlistSubmit(e) {
       e.preventDefault();
-      const email = document.getElementById('userEmail').value;
-      if(email) {
-        document.getElementById('formSuccess').style.display = 'block';
-        document.getElementById('userEmail').value = '';
+      const emailField = document.getElementById('waitlistEmail');
+      if (emailField.value) {
+        document.getElementById('waitlistFeedback').style.display = 'block';
+        emailField.value = '';
       }
     }
   </script>
 </body>
 </html>
+
+```
