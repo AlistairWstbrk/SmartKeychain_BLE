@@ -1,10 +1,3 @@
-Here is a completely redesigned, single-file production-ready `index.html`. This architecture shifts the entire platform into a clean, unified **Technical Engineering Dashboard**.
-
-The aesthetic is strictly anchored to a premium **Industrial Utility design system** using structured grid borders, deep charcoal planes, a slate/cobalt functional accent color, and absolute zero neon/cyberpunk elements.
-
-The page features an interactive, real-time **Circular Canvas Drawing Matrix**, an architectural board comparison engine, and an implementation lifecycle roadmap.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,23 +10,18 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- INDUSTRIAL DESIGN CORE SYSTEM --- */
     :root {
       --bg: #09090b;
       --panel-bg: #121214;
       --panel-border: #27272a;
       --border-hover: #3f3f46;
-      --accent: #3b82f6; /* Functional Cobalt */
+      --accent: #2563eb; /* Industrial Cobalt */
       --text: #f4f4f5;
       --text-muted: #8e8e93;
       --canvas-bg: #18181b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg);
@@ -43,7 +31,7 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
       line-height: 1.6;
     }
 
-    /* --- LAYOUT PIPELINE --- */
+    /* Navigation */
     header {
       border-bottom: 1px solid var(--panel-border);
       background-color: var(--panel-bg);
@@ -68,427 +56,88 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
       letter-spacing: 0.1em;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 1.75rem;
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    
+    .portal-link {
+      background-color: var(--text);
+      color: var(--bg) !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
     }
+    .portal-link:hover { background-color: #e4e4e7; }
 
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
+    main { max-width: 1300px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
-    .nav-links a:hover {
-      color: var(--text);
-    }
+    .section-header { margin-bottom: 2rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--panel-border); }
+    .section-header h2 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+    .section-header p { color: var(--text-muted); font-size: 0.85rem; }
 
-    main {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem;
-    }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 4rem; }
+    @media (min-width: 1024px) { .dashboard-grid { grid-template-columns: 7fr 5fr; } }
 
-    /* --- SECTION HEADERS --- */
-    .section-header {
-      margin-bottom: 2rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--panel-border);
-    }
+    .panel { background-color: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 1.5rem; }
+    .panel-title-area { margin-bottom: 1.25rem; }
+    .panel-title { font-size: 0.9rem; font-weight: 600; }
+    .panel-desc { color: var(--text-muted); font-size: 0.75rem; }
 
-    .section-header h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
+    .control-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    @media (min-width: 640px) { .control-row { grid-template-columns: 1fr 1fr; } }
 
-    .section-header p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* --- WORKSPACE LAYOUT (CONTROL PANEL) --- */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-bottom: 4rem;
-    }
-
-    @media (min-width: 1024px) {
-      .dashboard-grid {
-        grid-template-columns: 7fr 5fr;
-      }
-    }
-
-    .panel {
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 1.5rem;
-    }
-
-    .panel-title-area {
-      margin-bottom: 1.25rem;
-    }
-
-    .panel-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .panel-desc {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-    }
-
-    /* --- CONTROL COMPONENTS --- */
-    .control-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    @media (min-width: 640px) {
-      .control-row {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .input-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+    .input-wrapper { display: flex; flex-direction: column; gap: 0.35rem; }
+    label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
     .form-input, .form-select {
-      background-color: var(--bg);
-      border: 1px solid var(--panel-border);
-      color: var(--text);
-      padding: 0.65rem 0.85rem;
-      border-radius: 5px;
-      font-family: inherit;
-      font-size: 0.85rem;
-      outline: none;
-      transition: border-color 0.2s;
+      background-color: var(--bg); border: 1px solid var(--panel-border); color: var(--text);
+      padding: 0.65rem 0.85rem; border-radius: 4px; font-family: inherit; font-size: 0.85rem; outline: none; transition: border-color 0.2s;
     }
+    .form-input:focus, .form-select:focus { border-color: var(--border-hover); }
 
-    .form-input:focus, .form-select:focus {
-      border-color: var(--border-hover);
-    }
-
-    /* Interactive Canvas Elements */
     .canvas-container {
-      background-color: var(--canvas-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
+      background-color: var(--canvas-bg); border: 1px solid var(--panel-border); border-radius: 6px;
+      padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;
     }
+    .drawing-board { background-color: #000; border: 1px solid var(--panel-border); border-radius: 50%; cursor: crosshair; touch-action: none; }
 
-    .drawing-board {
-      background-color: #000;
-      border: 1px solid var(--panel-border);
-      border-radius: 50%; /* Masked circularly to match the 1.28" LCD profile */
-      cursor: crosshair;
-      touch-action: none;
-    }
+    .btn-group { display: flex; gap: 0.5rem; width: 100%; }
+    .btn { flex: 1; background-color: var(--text); color: var(--bg); border: none; padding: 0.6rem 1rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+    .btn:hover { background-color: #e4e4e7; }
+    .btn-secondary { background-color: transparent; border: 1px solid var(--panel-border); color: var(--text); }
+    .btn-secondary:hover { background-color: var(--bg); border-color: var(--border-hover); }
 
-    .btn-group {
-      display: flex;
-      gap: 0.5rem;
-      width: 100%;
-    }
-
-    .btn {
-      flex: 1;
-      background-color: var(--text);
-      color: var(--bg);
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn:hover {
-      background-color: #e4e4e7;
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      border: 1px solid var(--panel-border);
-      color: var(--text);
-    }
-
-    .btn-secondary:hover {
-      background-color: var(--bg);
-      border-color: var(--border-hover);
-    }
-
-    /* Hardware Simulator Visualizer */
     .visualizer-pane {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 2.5rem;
-      height: 100%;
-      min-height: 350px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background-color: var(--bg); border: 1px solid var(--panel-border); border-radius: 6px; padding: 2.5rem; height: 100%; min-height: 350px;
     }
-
     .hardware-chassis {
-      width: 220px;
-      height: 220px;
-      background-color: #1c1c1e;
-      border: 2px solid #3a3a3c;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
+      width: 220px; height: 220px; background-color: #1c1c1e; border: 2px solid #3a3a3c; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 10px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5); position: relative;
     }
+    .lcd-viewport { width: 180px; height: 180px; background-color: #000; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+    .lcd-canvas-mirror { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .lcd-text-overlay { position: relative; z-index: 10; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-align: center; color: #ffffff; pointer-events: none; }
 
-    .lcd-viewport {
-      width: 180px;
-      height: 180px;
-      background-color: #000;
-      border-radius: 50%;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
+    .architecture-container { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 4rem; }
+    @media (min-width: 768px) { .architecture-container { grid-template-columns: 1fr 1fr; } }
+    .arch-card { background-color: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 1.75rem; }
+    .arch-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .arch-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; }
+    
+    .spec-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .spec-table tr { border-bottom: 1px solid rgba(63, 63, 70, 0.3); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table td { padding: 0.6rem 0; }
+    .spec-table td:last-child { text-align: right; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); }
 
-    .lcd-canvas-mirror {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
+    .roadmap-track { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 4rem; }
+    .roadmap-node { background-color: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 1.5rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+    .node-index { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--panel-border); padding: 0.25rem 0.6rem; border-radius: 4px; }
+    .node-content h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .node-content p { color: var(--text-muted); font-size: 0.85rem; }
 
-    .lcd-text-overlay {
-      position: relative;
-      z-index: 10;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      text-align: center;
-      color: #ffffff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
-      pointer-events: none;
-    }
-
-    /* --- BOARD ARCHITECTURE ANALYSIS --- */
-    .architecture-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-bottom: 4rem;
-    }
-
-    @media (min-width: 768px) {
-      .architecture-container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .arch-card {
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 1.75rem;
-    }
-
-    .arch-card h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .arch-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .spec-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-
-    .spec-table tr {
-      border-bottom: 1px solid rgba(63, 63, 70, 0.3);
-    }
-
-    .spec-table tr:last-child {
-      border-bottom: none;
-    }
-
-    .spec-table td {
-      padding: 0.6rem 0;
-    }
-
-    .spec-table td:last-child {
-      text-align: right;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
-    }
-
-    /* --- ROADMAP TIMELINE --- */
-    .roadmap-track {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      margin-bottom: 4rem;
-    }
-
-    .roadmap-node {
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 1.5rem;
-      display: flex;
-      gap: 1.5rem;
-      align-items: flex-start;
-    }
-
-    .node-index {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      background-color: var(--bg);
-      border: 1px solid var(--panel-border);
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-    }
-
-    .node-content h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .node-content p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* --- CONVERSIONS / FILE LINKS --- */
-    .file-lock-flex {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-bottom: 4rem;
-    }
-
-    @media (min-width: 640px) {
-      .file-lock-flex {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .locked-card {
-      border: 1px dashed var(--panel-border);
-      padding: 1.5rem;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: rgba(18,18,20,0.2);
-    }
-
-    .locked-card text-group h5 {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .locked-card text-group p {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .lock-pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      background-color: rgba(255,255,255,0.05);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    /* --- GENERAL INTEREST SIGNUP --- */
-    .signup-wrapper {
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 2.5rem;
-      text-align: center;
-      max-width: 550px;
-      margin: 0 auto;
-    }
-
-    .signup-wrapper h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .signup-wrapper p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-inline {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    @media (min-width: 480px) {
-      .form-inline {
-        flex-direction: row;
-      }
-    }
-
-    .form-inline .form-input {
-      flex: 1;
-    }
-
-    footer {
-      border-top: 1px solid var(--panel-border);
-      padding: 2rem 1.5rem;
-      text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 4rem;
-    }
+    footer { border-top: 1px solid var(--panel-border); padding: 2rem 1.5rem; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 4rem; }
   </style>
 </head>
 <body>
@@ -497,23 +146,20 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
     <div class="nav-container">
       <div class="brand">MAXIMALIST LABS</div>
       <nav class="nav-links">
-        <a href="#panel">Console</a>
         <a href="#hardware">Architecture</a>
         <a href="#roadmap">Pipeline</a>
-        <a href="#files">Repository</a>
+        <a href="portal.html" class="portal-link">Launch BLE Portal</a>
       </nav>
     </div>
   </header>
 
   <main>
-    
     <section class="section-header" id="panel">
-      <h2>Peripheral Verification Interface</h2>
-      <p>Simulate, sketch, and map configuration matrices to your air-wired wearable displays in real-time.</p>
+      <h2>Web Simulation Interface</h2>
+      <p>Test layout configurations before connecting to live hardware via the Bluetooth portal.</p>
     </section>
 
     <div class="dashboard-grid">
-      
       <div class="panel">
         <div class="panel-title-area">
           <div class="panel-title">Console Diagnostics</div>
@@ -534,23 +180,21 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
           </div>
         </div>
 
-        <div class="input-wrapper" style="margin-bottom: 0.75rem;">
-          <label>Matrix Drawing Stream (Circular Crop)</label>
-        </div>
+        <div class="input-wrapper" style="margin-bottom: 0.75rem;"><label>Matrix Drawing Stream</label></div>
         
         <div class="canvas-container">
           <canvas id="paintCanvas" class="drawing-board" width="180" height="180"></canvas>
           <div class="btn-group">
-            <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
-            <button class="btn" onclick="triggerFirmwareAlert()">Verify Stream Payload</button>
+            <button class="btn btn-secondary" onclick="clearCanvas()">Clear Input</button>
+            <button class="btn" onclick="window.location.href='portal.html'">Open Live Portal</button>
           </div>
         </div>
       </div>
 
       <div class="panel">
         <div class="panel-title-area">
-          <div class="panel-title">Virtual Hardware Visualizer</div>
-          <div class="panel-desc">Real-time rendering mirror of air-wired 1.28" LCD configuration</div>
+          <div class="panel-title">Hardware Visualizer</div>
+          <div class="panel-desc">Real-time mirror of air-wired 1.28" LCD configuration</div>
         </div>
 
         <div class="visualizer-pane">
@@ -562,118 +206,65 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
           </div>
         </div>
       </div>
-
     </div>
 
     <section class="section-header" id="hardware">
-      <h2>Direct-Wired Component Infrastructure</h2>
-      <p>Analysis of direct component pin-mapping configurations without custom PCB layers.</p>
+      <h2>Direct-Wired Infrastructure</h2>
+      <p>Component pin-mapping configurations without custom PCB layers.</p>
     </section>
 
     <div class="architecture-container">
-      
       <div class="arch-card">
         <h3>ESP32-S3 Mini Configuration</h3>
-        <p>Engineered for complex real-time frame buffer allocation and high-throughput data parsing loops.</p>
+        <p>Engineered for complex real-time frame buffer allocation and data loops.</p>
         <table class="spec-table">
           <tr><td>Processing Unit</td><td>Dual-Core Xtensa LX7 @ 160MHz</td></tr>
           <tr><td>Memory Profile</td><td>2MB PSRAM // 4MB Flash Memory</td></tr>
-          <tr><td>Canvas Buffer Cap</td><td>High Headroom (Supports multi-frame caching)</td></tr>
-          <tr><td>Power Mitigation</td><td>Requires External Inline 1S Protection Board</td></tr>
-          <tr><td>Assembly Layout</td><td>Direct Point-to-Point Air-Wired Solder Bridge</td></tr>
+          <tr><td>Power Mitigation</td><td>Inline 1S Protection Board</td></tr>
+          <tr><td>Assembly Layout</td><td>Point-to-Point Air-Wired Solder Bridge</td></tr>
         </table>
       </div>
 
       <div class="arch-card">
         <h3>ESP32-C3 Mini Configuration</h3>
-        <p>Optimized for lightweight numeric array tracking, simple telemetry readouts, and minimized power states.</p>
+        <p>Optimized for lightweight telemetry readouts and battery efficiency.</p>
         <table class="spec-table">
           <tr><td>Processing Unit</td><td>Single-Core RISC-V @ 160MHz</td></tr>
           <tr><td>Memory Profile</td><td>400KB SRAM // 4MB Flash Memory</td></tr>
-          <tr><td>Canvas Buffer Cap</td><td>Constrained (Requires fine array compression)</td></tr>
-          <tr><td>Power Mitigation</td><td>Requires External Inline 1S Protection Board</td></tr>
-          <tr><td>Assembly Layout</td><td>Direct Point-to-Point Air-Wired Solder Bridge</td></tr>
+          <tr><td>Power Mitigation</td><td>Inline 1S Protection Board</td></tr>
+          <tr><td>Assembly Layout</td><td>Point-to-Point Air-Wired Solder Bridge</td></tr>
         </table>
       </div>
-
     </div>
 
     <section class="section-header" id="roadmap">
-      <h2>System Lifecycle & Implementation Roadmap</h2>
-      <p>The structured execution protocol from raw development nodes to active daily operation.</p>
+      <h2>Implementation Roadmap</h2>
+      <p>The execution protocol from development nodes to active operation.</p>
     </section>
 
     <div class="roadmap-track">
-      
       <div class="roadmap-node">
         <div class="node-index">01</div>
         <div class="node-content">
           <h4>Air-Wired Harness Integration</h4>
-          <p>Bridge the chosen mini controller (S3 or C3) directly to the circular 1.28" display via its hardware SPI pin configuration. Install an inline 1S protection circuit board directly onto the LiPo battery wiring rail to govern low-voltage cutoffs safely.</p>
+          <p>Bridge the chosen controller (S3 or C3) directly to the 1.28" display via its hardware SPI configuration. Install an inline 1S protection circuit board.</p>
         </div>
       </div>
-
       <div class="roadmap-node">
         <div class="node-index">02</div>
         <div class="node-content">
           <h4>WebBrowser Firmware Flashing</h4>
-          <p>Connect the hardware node via a standard USB-C cable. Use our upcoming integrated WebSerial flashing client to compile and write the core runtime binary assets to the chip directly out of Google Chrome—no external programming environment required.</p>
+          <p>Connect the hardware node via USB-C. Use the integrated WebSerial client to compile and write runtime binary assets to the chip.</p>
         </div>
       </div>
-
       <div class="roadmap-node">
         <div class="node-index">03</div>
         <div class="node-content">
-          <h4>Local Controller Initialization</h4>
-          <p>Once rebooted, the hardware initializes its local Bluetooth Low Energy (BLE) services, configuring internal non-volatile storage sectors to safely preserve operational parameters through full system restarts.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-node">
-        <div class="node-index">04</div>
-        <div class="node-content">
           <h4>Active Telemetry Execution</h4>
-          <p>Bond your web browser console to the live node. Stream custom vector sketches, update dashboard readout string metrics, and scale display features seamlessly on the fly.</p>
+          <p>Bond your web browser console to the live node. Stream custom vector sketches and update dashboard readout metrics on the fly.</p>
         </div>
-      </div>
-
-    </div>
-
-    <section class="section-header" id="files">
-      <h2>Asset Repository Download Library</h2>
-      <p>Access structural parameters and core execution files.</p>
-    </section>
-
-    <div class="file-lock-flex">
-      <div class="locked-card">
-        <div class="disabled-meta">
-          <h5>Enclosure File Package (.STL)</h5>
-          <p>Compact form factor geometry built for loose component spacing.</p>
-        </div>
-        <div class="lock-pill">Coming Soon</div>
-      </div>
-      <div class="locked-card">
-        <div class="disabled-meta">
-          <h5>Core Firmware Source Layout</h5>
-          <p>Complete script packages handling display mapping drivers and BLE pipes.</p>
-        </div>
-        <div class="lock-pill">Coming Soon</div>
       </div>
     </div>
-
-    <section class="signup-wrapper">
-      <h3>System Launch Registries</h3>
-      <p>Provide your contact email below to receive technical documentation alerts, hardware configuration releases, and early kit deployment notices.</p>
-      <form onsubmit="handleWaitlistSubmit(event)">
-        <div class="form-inline">
-          <input type="email" id="waitlistEmail" class="form-input" placeholder="Enter engineering contact email..." required />
-          <button type="submit" class="btn" style="max-width: 150px;">Log Access</button>
-        </div>
-      </form>
-      <div id="waitlistFeedback" style="display: none; margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted);">
-        [✓] System address logged in waitlist registry.
-      </div>
-    </section>
 
   </main>
 
@@ -686,105 +277,56 @@ The page features an interactive, real-time **Circular Canvas Drawing Matrix**, 
     const ctx = canvas.getContext('2d');
     const mirrorCanvas = document.getElementById('hardwareMirrorCanvas');
     const mCtx = mirrorCanvas.getContext('2d');
-    
     let isDrawing = false;
 
-    // Initialize Canvas Parameters to smooth monochrome specs
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 4;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    mCtx.strokeStyle = '#ffffff'; mCtx.lineWidth = 4; mCtx.lineCap = 'round'; mCtx.lineJoin = 'round';
 
-    mCtx.strokeStyle = '#ffffff';
-    mCtx.lineWidth = 4;
-    mCtx.lineCap = 'round';
-    mCtx.lineJoin = 'round';
-
-    // Desktop Mouse Controls
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
 
-    // Mobile Touch Controls
     canvas.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
-      const mouseEvent = new MouseEvent('mousedown', {
-        clientX: touch.clientX,
-        clientY: touch.clientY
-      });
-      canvas.dispatchEvent(mouseEvent);
+      canvas.dispatchEvent(new MouseEvent('mousedown', { clientX: touch.clientX, clientY: touch.clientY }));
     }, { passive: true });
 
     canvas.addEventListener('touchmove', (e) => {
       const touch = e.touches[0];
-      const mouseEvent = new MouseEvent('mousemove', {
-        clientX: touch.clientX,
-        clientY: touch.clientY
-      });
-      canvas.dispatchEvent(mouseEvent);
+      canvas.dispatchEvent(new MouseEvent('mousemove', { clientX: touch.clientX, clientY: touch.clientY }));
     }, { passive: true });
 
     function getCanvasCoordinates(e) {
       const rect = canvas.getBoundingClientRect();
-      return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     }
 
     function startDrawing(e) {
       isDrawing = true;
       const coords = getCanvasCoordinates(e);
-      ctx.beginPath();
-      ctx.moveTo(coords.x, coords.y);
-      
-      mCtx.beginPath();
-      mCtx.moveTo(coords.x, coords.y);
+      ctx.beginPath(); ctx.moveTo(coords.x, coords.y);
+      mCtx.beginPath(); mCtx.moveTo(coords.x, coords.y);
     }
 
     function draw(e) {
       if (!isDrawing) return;
       const coords = getCanvasCoordinates(e);
-      
-      ctx.lineTo(coords.x, coords.y);
-      ctx.stroke();
-
-      // Mirror the coordinate stream instantly to the virtual hardware preview element
-      mCtx.lineTo(coords.x, coords.y);
-      mCtx.stroke();
+      ctx.lineTo(coords.x, coords.y); ctx.stroke();
+      mCtx.lineTo(coords.x, coords.y); mCtx.stroke();
     }
 
-    function stopDrawing() {
-      isDrawing = false;
-    }
+    function stopDrawing() { isDrawing = false; }
 
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       mCtx.clearRect(0, 0, mirrorCanvas.width, mirrorCanvas.height);
     }
 
-    // Sync Text Payload Box to LCD Interface Viewport
     function syncVisualizer() {
       const sourceText = document.getElementById('textStreamInput').value;
-      const targetDisplay = document.getElementById('lcdTextDisplay');
-      targetDisplay.textContent = sourceText ? sourceText : ' ';
-    }
-
-    function triggerFirmwareAlert() {
-      alert("[DATA BUS] Stream packet arrays compiled. Verified ready for WebSerial transmission.");
-    }
-
-    function handleWaitlistSubmit(e) {
-      e.preventDefault();
-      const emailField = document.getElementById('waitlistEmail');
-      if (emailField.value) {
-        document.getElementById('waitlistFeedback').style.display = 'block';
-        emailField.value = '';
-      }
+      document.getElementById('lcdTextDisplay').textContent = sourceText ? sourceText : ' ';
     }
   </script>
 </body>
 </html>
-
-```
