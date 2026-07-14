@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MAXIMALIST LABS // Matrix Launchpad</title>
+  <title>Maximalist Labs // Hardware Hub</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- SYSTEM CORE VARIABLES --- */
+    /* --- INDUSTRIAL DESIGN SYSTEM --- */
     :root {
-      --bg-color: #09090b;
-      --card-bg: rgba(18, 18, 22, 0.4);
-      --border-color: rgba(63, 63, 70, 0.3);
-      --cyan-glow: #06b6d4;
-      --purple-glow: #a855f7;
-      --text-main: #f4f4f5;
-      --text-muted: #a1a1aa;
+      --bg: #09090b;
+      --panel-bg: #121214;
+      --panel-border: #27272a;
+      --border-hover: #3f3f46;
+      --accent: #2563eb; /* Clean industrial cobalt blue */
+      --accent-dim: rgba(37, 99, 235, 0.1);
+      --text: #f4f4f5;
+      --text-muted: #8e8e93;
+      --terminal-bg: #030303;
     }
 
     * {
@@ -28,373 +30,748 @@
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      perspective: 1000px;
-    }
-
-    /* --- MAGIC UI RETRO GRID EFFECT --- */
-    .grid-container {
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(63, 63, 70, 0.15) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(63, 63, 70, 0.15) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 40%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 40%, transparent 100%);
-      opacity: 0.6;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* --- LAYOUT PIPELINE --- */
-    header {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5rem;
-      display: flex;
-      justify-content: flex-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(63, 63, 70, 0.2);
-      position: relative;
-      z-index: 10;
-    }
-
-    .header-flex {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 0.875rem;
-      letter-spacing: 0.2em;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .logo-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--cyan-glow);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--cyan-glow);
-      animation: pulse 2s infinite;
-    }
-
-    .status-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--cyan-glow);
-      background: rgba(6, 182, 212, 0.05);
-      padding: 0.25rem 0.75rem;
-      border: 1px solid rgba(6, 182, 212, 0.15);
-      border-radius: 9999px;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 4rem 1.5rem;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* --- HERO CONTAINER --- */
-    .hero-split {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-bottom: 6rem;
-    }
-
-    @media (min-width: 968px) {
-      .hero-split {
-        grid-template-columns: 5fr 7fr;
-      }
-    }
-
-    .hero-text h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      tracking-tight;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-text p {
-      color: var(--text-muted);
-      font-size: 1.125rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
-
-    /* --- INTEREST FORM WITH SHIMMER BUTTON --- */
-    .launch-form {
-      display: flex;
-      gap: 0.75rem;
-      background: rgba(24, 24, 27, 0.5);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem;
-      border-radius: 1rem;
-      max-width: 500px;
-      transition: border-color 0.3s;
-    }
-
-    .launch-form:focus-within {
-      border-color: rgba(6, 182, 212, 0.4);
-    }
-
-    .launch-form input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-main);
-      padding: 0.75rem 1rem;
-      flex: 1;
-      font-size: 0.9rem;
-    }
-
-    .shimmer-btn {
-      background: #fff;
-      color: #000;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .shimmer-btn:hover {
-      background: #e4e4e7;
-      transform: translateY(-1px);
-    }
-
-    .shimmer-btn::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 30%;
-      height: 200%;
-      background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
-      transform: rotate(30deg);
-      animation: shimmer 3s infinite linear;
-    }
-
-    /* --- 3D / MODEL CONTAINER WITH MAGIC UI BORDER BEAM --- */
-    .model-viewport {
-      height: 450px;
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 2rem;
-      backdrop-blur: 12px;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    /* Animated Laser Border Beam */
-    .model-viewport::before {
-      content: '';
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      background: linear-gradient(90deg, var(--cyan-glow), var(--purple-glow));
-      animation: border-beam 6s infinite linear;
-      border-radius: 50%;
-      filter: blur(40px);
-      opacity: 0.15;
-    }
-
-    .placeholder-mesh {
-      font-family: 'JetBrains Mono', monospace;
-      color: rgba(6, 182, 212, 0.4);
-      font-size: 0.75rem;
-      text-align: center;
-      border: 1px dashed rgba(6, 182, 212, 0.2);
-      padding: 3rem;
-      border-radius: 1.5rem;
-      letter-spacing: 0.1em;
-    }
-
-    /* --- BENTO FEATURE GRID --- */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    @media (min-width: 768px) {
-      .bento-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .bento-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 2.5rem;
-      border-radius: 1.5rem;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .bento-card:hover {
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .icon-badge {
-      width: 45px;
-      height: 45px;
-      border-radius: 0.75rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      font-weight: bold;
-    }
-
-    .icon-cyan { bg: rgba(6, 182, 212, 0.1); color: var(--cyan-glow); background: rgba(6, 182, 212, 0.08); }
-    .icon-purple { bg: rgba(168, 85, 247, 0.1); color: var(--purple-glow); background: rgba(168, 85, 247, 0.08); }
-
-    .bento-card h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .bento-card p {
-      color: var(--text-muted);
-      font-size: 0.925rem;
       line-height: 1.5;
     }
 
-    .bento-wide {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 1.5rem;
+    /* --- NAVIGATION --- */
+    header {
+      border-b: 1px solid var(--panel-border);
+      background-color: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
-    @media (min-width: 768px) {
-      .bento-wide {
-        flex-direction: row;
-        align-items: center;
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* --- LAYOUT GRID --- */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .hero-section {
+      margin-bottom: 4rem;
+      max-width: 650px;
+    }
+
+    .hero-section h1 {
+      font-size: 2.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero-section p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* --- DASHBOARD DEMO WORKSPACE --- */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (min-width: 968px) {
+      .workspace-grid {
+        grid-template-columns: 7fr 5fr;
       }
     }
 
-    .tag-pill {
+    .panel {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .panel-subtitle {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.75rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
       color: var(--text-muted);
     }
 
-    /* --- ANIMATION KEYFRAMES --- */
-    @keyframes shimmer {
-      100% { left: 150%; }
+    /* --- DASHBOARD UI COMPONENTS --- */
+    .dashboard-ui {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      flex-grow: 1;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--cyan-glow)); }
-      50% { opacity: 0.4; filter: drop-shadow(0 0 2px var(--cyan-glow)); }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    @keyframes border-beam {
-      0% { transform: rotate(0deg) translate(180px) rotate(0deg); }
-      100% { transform: rotate(360deg) translate(180px) rotate(-360deg); }
+    label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .custom-select, .btn-action, .input-field {
+      width: 100%;
+      background-color: var(--bg);
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .custom-select:focus, .input-field:focus {
+      border-color: var(--border-hover);
+    }
+
+    .btn-action {
+      background-color: var(--text);
+      color: var(--bg);
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      background-color: #e4e4e7;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg);
+      border-color: var(--border-hover);
+    }
+
+    /* --- VIRTUAL HARDWARE SCREEN VIEW --- */
+    .display-preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 2rem;
+      min-height: 240px;
+    }
+
+    .hardware-screen {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background-color: #000;
+      border: 6px solid #2d2d30;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen-content {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #fff;
+      z-index: 2;
+    }
+
+    .screen-face {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* --- INTEGRATED ESP FLASHER --- */
+    .flasher-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      height: 100%;
+    }
+
+    .chip-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .chip-option {
+      border: 1px solid var(--panel-border);
+      background-color: var(--bg);
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .chip-option.active {
+      border-color: var(--text);
+      background-color: rgba(255,255,255,0.02);
+    }
+
+    .chip-option h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .chip-option p {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: var(--bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background-color: var(--text);
+      transition: width 0.1s linear;
+    }
+
+    .terminal-console {
+      background-color: var(--terminal-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #a1a1aa;
+      height: 120px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* --- HARDWARE CONFIGURATION PLANS (NO PCB) --- */
+    .section-title-wrapper {
+      margin-bottom: 2rem;
+    }
+
+    .section-title-wrapper h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .section-title-wrapper p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (min-width: 768px) {
+      .plans-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .plan-card {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .plan-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border: 1px solid var(--panel-border);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: 1rem;
+    }
+
+    .plan-card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .spec-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      border-top: 1px solid var(--panel-border);
+      padding-top: 1.25rem;
+    }
+
+    .spec-list li {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+    }
+
+    .spec-list li span:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    /* --- DOWNLOADS / COMING SOON --- */
+    .coming-soon-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (min-width: 768px) {
+      .coming-soon-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .disabled-card {
+      background-color: rgba(18, 18, 20, 0.2);
+      border: 1px dashed var(--panel-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0.6;
+    }
+
+    .disabled-meta h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .disabled-meta p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .lock-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(255,255,255,0.05);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    /* --- INTEREST FORM --- */
+    .form-panel {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-panel h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-panel p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .input-inline-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 480px) {
+      .input-inline-group {
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+    }
+
+    footer {
+      border-top: 1px solid var(--panel-border);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="grid-container"></div>
-
   <header>
-    <div class="header-flex">
-      <div class="logo">
-        <div class="logo-dot"></div>
-        MAXIMALIST LABS
-      </div>
-      <div class="status-badge">PROJECT: MATRIX // ASSET.01</div>
+    <div class="nav-container">
+      <div class="brand">MAXIMALIST LABS</div>
+      <nav class="nav-links">
+        <a href="#dashboard">Demo Dashboard</a>
+        <a href="#flasher">ESP Flasher</a>
+        <a href="#wiring">Wiring Plans</a>
+        <a href="#files">Files</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <div class="hero-split">
-      <div class="hero-text">
-        <h1>The Interactive Cyber Companion.</h1>
-        <p>An open-source, ultra-miniature wearable ecosystem engineered for makers. Packs deep memory buffers, high-speed BLE image arrays, and robust system parameters directly onto your keychain loop.</p>
-        
-        <div class="launch-form">
-          <input type="email" placeholder="Enter email for MakerWorld drop..." required />
-          <button class="shimmer-btn">Secure Access</button>
-        </div>
-      </div>
+    
+    <section class="hero-section">
+      <h1>Hardware Control Center</h1>
+      <p>Configure, test, and program your compact wearable system architectures directly from the browser. Switch platforms natively using integrated WebSerial flashing controllers.</p>
+    </section>
 
-      <div class="model-viewport">
-        <div class="placeholder-mesh">
-          [ RENDER_ENGINE_CONNECTED ]<br/><br/>
-          DROP YOUR .GLB ASSET HERE<br/>
-          VIA CANVAS PIPELINE
-        </div>
-      </div>
-    </div>
-
-    <div class="bento-grid">
+    <section class="workspace-grid" id="dashboard">
       
-      <div class="bento-card">
-        <div class="icon-badge icon-cyan">S3</div>
-        <h3>Xiao S3 Architecture</h3>
-        <p>Harnessing dual-core calculation nodes matched with an extensive 8MB PSRAM memory buffer to parse dense custom drawing frames cleanly.</p>
-      </div>
-
-      <div class="bento-card">
-        <div class="icon-badge icon-purple">IPS</div>
-        <h3>1.28" Circular Display</h3>
-        <p>A crystal-clear 240x240 circular interface driven directly over optimized hardware SPI pipelines for high frame rate feedback loops.</p>
-      </div>
-
-      <div class="bento-card">
-        <div class="icon-badge icon-cyan">BLE</div>
-        <h3>Web-Bluetooth Link</h3>
-        <p>Zero software dependencies or runtime compilation profiles required. Push drawings, canvas matrix blocks, and system stats directly from your browser engine.</p>
-      </div>
-
-      <div class="bento-card bento-wide">
-        <div>
-          <h3 style="margin-bottom: 0.5rem;">Solderless Kit Configuration</h3>
-          <p style="max-width: 700px;">Our custom circular motherboards abstract peripheral hardware connections into quick-insert terminal banks. Features hardware over-discharge protection systems built straight onto the core bus network.</p>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Interactive Device Workspace</div>
+          <div class="panel-subtitle">VIRTUAL_SESSION_ACTIVE</div>
         </div>
-        <div class="tag-pill">NO SOLDERING // SNAP LAYOUT</div>
+        
+        <div class="dashboard-ui">
+          <div class="control-group" style="grid-column: 1 / -1; margin-bottom: 0.5rem;">
+            <div class="display-preview-box">
+              <div class="hardware-screen" id="virtualScreen">
+                <div class="screen-content">
+                  <div class="screen-face" id="faceIcon">👁</div>
+                  <div id="statusLabel">Telemetry</div>
+                  <div style="font-size: 0.6rem; color: #8e8e93; margin-top: 2px;" id="modeValue">3.3V Norm</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="faceSelector">Face Render Logic</label>
+            <select id="faceSelector" class="custom-select" onchange="updateVirtualScreen()">
+              <option value="eye">Default Telemetry (Eye)</option>
+              <option value="smile">Companion Mode (Smile)</option>
+              <option value="matrix">Data Stream (Pulse)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="textUploader">Custom Text Stream</label>
+            <input type="text" id="textUploader" class="input-field" value="Telemetry" placeholder="Enter output matrix array text..." oninput="updateTextLabel()" />
+          </div>
+        </div>
       </div>
 
-    </div>
+      <div class="panel" id="flasher">
+        <div class="panel-header">
+          <div class="panel-title">WebSerial Firmware Deployment</div>
+          <div class="panel-subtitle">SYSTEM_READY</div>
+        </div>
+        
+        <div class="flasher-layout">
+          <label>Target Controller Profile</label>
+          <div class="chip-selector">
+            <div class="chip-option active" id="chipS3" onclick="selectChip('S3')">
+              <h4>ESP32-S3 Mini</h4>
+              <p>2MB PSRAM Array</p>
+            </div>
+            <div class="chip-option" id="chipC3" onclick="selectChip('C3')">
+              <h4>ESP32-C3 Mini</h4>
+              <p>Standard Core</p>
+            </div>
+          </div>
+
+          <button class="btn-action" id="flashBtn" onclick="runMockFlash()">
+            Deploy Core Firmware
+          </button>
+
+          <div class="progress-bar-container">
+            <div class="progress-fill" id="flashProgress"></div>
+          </div>
+
+          <label>Console Diagnostic Yield</label>
+          <div class="terminal-console" id="terminalOutput">Awaiting deployment execution signal...</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section-title-wrapper" id="wiring">
+      <h2>Air-Wired Architecture Layouts</h2>
+      <p>Direct component pin-mapping guidelines without custom PCB integration requirements.</p>
+    </section>
+
+    <section class="plans-grid">
+      
+      <div class="plan-card">
+        <div class="plan-badge">HIGH PERFORMANCE</div>
+        <h3>S3 Mini Direct Integration</h3>
+        <p>Optimized for deep-buffer frame transformations and live canvas data streams over Bluetooth LE pipelines.</p>
+        
+        <ul class="spec-list">
+          <li><span>Microcontroller</span> <span>ESP32-S3 Mini</span></li>
+          <li><span>Memory Layout</span> <span>2MB PSRAM // 4MB Flash</span></li>
+          <li><span>Display Pipeline</span> <span>Hardware SPI (Pins 7, 9, 44)</span></li>
+          <li><span>Battery Protection</span> <span>Inline 1S Wire Module (Required)</span></li>
+          <li><span>Interconnect Method</span> <span>Air-Wired Solder Bridge // No PCB</span></li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-badge">POWER CONSERVATIVE</div>
+        <h3>C3 Mini Direct Integration</h3>
+        <p>A compact, streamlined profile ideal for simple text tracking arrays, telemetry output, and maximum battery cycle lifespans.</p>
+        
+        <ul class="spec-list">
+          <li><span>Microcontroller</span> <span>ESP32-C3 Mini</span></li>
+          <li><span>Memory Layout</span> <span>400KB SRAM // 4MB Flash</span></li>
+          <li><span>Display Pipeline</span> <span>Standard SPI Configuration</span></li>
+          <li><span>Battery Protection</span> <span>Inline 1S Wire Module (Required)</span></li>
+          <li><span>Interconnect Method</span> <span>Air-Wired Solder Bridge // No PCB</span></li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="section-title-wrapper" id="files">
+      <h2>System Source Profiles</h2>
+      <p>Access CAD structural geometry files and structural source models.</p>
+    </section>
+
+    <section class="coming-soon-grid">
+      
+      <div class="disabled-card">
+        <div class="disabled-meta">
+          <h4>3D Case Models (.STL)</h4>
+          <p>Enclosure layout tolerances optimized for direct-wired components.</p>
+        </div>
+        <div class="lock-tag">Coming Soon</div>
+      </div>
+
+      <div class="disabled-card">
+        <div class="disabled-meta">
+          <h4>Source Logic Repository</h4>
+          <p>Full firmware script frameworks and canvas configuration profiles.</p>
+        </div>
+        <div class="lock-tag">Coming Soon</div>
+      </div>
+
+    </section>
+
+    <section class="form-panel">
+      <h3>Secure Production Launch Access</h3>
+      <p>Drop your email to receive system alerts, configuration documentation updates, and immediate access to hardware kits.</p>
+      
+      <form onsubmit="handleForm(event)">
+        <div class="input-inline-group">
+          <input type="email" id="userEmail" class="input-field" placeholder="Enter email address..." required />
+          <button type="submit" class="btn-action" style="max-width: 140px;">Join Waitlist</button>
+        </div>
+      </form>
+      <div id="formSuccess" style="margin-top: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #a1a1aa; display: none;">
+        [✓] Address successfully logged in system registry.
+      </div>
+    </section>
+
   </main>
 
+  <footer>
+    &copy; 2026 MAXIMALIST LABS. HARDWARE ARCHITECTURE PLATFORM.
+  </footer>
+
+  <script>
+    let selectedChipType = 'S3';
+
+    // Update Text on the Hardware Simulation Display
+    function updateTextLabel() {
+      const inputVal = document.getElementById('textUploader').value;
+      const label = document.getElementById('statusLabel');
+      label.textContent = inputVal ? inputVal : '...';
+    }
+
+    // Toggle Visual rendering profile arrays
+    function updateVirtualScreen() {
+      const selection = document.getElementById('faceSelector').value;
+      const icon = document.getElementById('faceIcon');
+      const container = document.getElementById('virtualScreen');
+      
+      if (selection === 'eye') {
+        icon.textContent = '👁';
+        container.style.borderColor = '#2d2d30';
+      } else if (selection === 'smile') {
+        icon.textContent = '◡̈';
+        container.style.borderColor = '#2563eb';
+      } else if (selection === 'matrix') {
+        icon.textContent = '⌁';
+        container.style.borderColor = '#3f3f46';
+      }
+    }
+
+    // Handle deployment hardware architecture toggle switches
+    function selectChip(type) {
+      selectedChipType = type;
+      document.getElementById('chipS3').classList.remove('active');
+      document.getElementById('chipC3').classList.remove('active');
+      
+      if(type === 'S3') {
+        document.getElementById('chipS3').classList.add('active');
+      } else {
+        document.getElementById('chipC3').classList.add('active');
+      }
+      
+      const consoleLog = document.getElementById('terminalOutput');
+      consoleLog.textContent = `Target profile architecture redefined to: ESP32-${type} Mini. Ready to flash.`;
+    }
+
+    // Integrated WebSerial Flasher Simulator Process Engine
+    function runMockFlash() {
+      const btn = document.getElementById('flashBtn');
+      const progress = document.getElementById('flashProgress');
+      const consoleLog = document.getElementById('terminalOutput');
+      
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      progress.style.width = '0%';
+      
+      consoleLog.textContent = `[INIT] Requesting WebSerial transmission access...\n`;
+      
+      setTimeout(() => {
+        consoleLog.textContent += `[SERIAL] Port opened successfully with ESP32-${selectedChipType} Mini via USB-C\n`;
+        consoleLog.textContent += `[CORE] Connection established. Entering bootloader mode...\n`;
+        consoleLog.textContent += `[MEM] Erasing flash sectors safely...\n`;
+        
+        let percentage = 0;
+        const interval = setInterval(() => {
+          percentage += 4;
+          progress.style.width = `${percentage}%`;
+          consoleLog.textContent = `[FLASH] Writing binaries to memory block: ${percentage}%\n`;
+          consoleLog.scrollTop = consoleLog.scrollHeight;
+          
+          if(percentage >= 100) {
+            clearInterval(interval);
+            consoleLog.textContent += `\n[SUCCESS] Flash binary verification confirmed.\n[BOOT] Rebooting chip node. Firmware running optimally.`;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            
+            // Mirror state to display logic
+            document.getElementById('modeValue').textContent = `${selectedChipType} Core`;
+          }
+        }, 100);
+        
+      }, 1200);
+    }
+
+    // Capture Interest Signup Engine
+    function handleForm(e) {
+      e.preventDefault();
+      const email = document.getElementById('userEmail').value;
+      if(email) {
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('userEmail').value = '';
+      }
+    }
+  </script>
 </body>
 </html>
