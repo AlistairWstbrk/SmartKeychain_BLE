@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAXIMALIST LABS // Matrix Launchpad</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- SYSTEM CORE VARIABLES --- */
+    :root {
+      --bg-color: #09090b;
+      --card-bg: rgba(18, 18, 22, 0.4);
+      --border-color: rgba(63, 63, 70, 0.3);
+      --cyan-glow: #06b6d4;
+      --purple-glow: #a855f7;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
+
+    /* --- MAGIC UI RETRO GRID EFFECT --- */
+    .grid-container {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(63, 63, 70, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(63, 63, 70, 0.15) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 40%, transparent 100%);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* --- LAYOUT PIPELINE --- */
+    header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: flex-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(63, 63, 70, 0.2);
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-flex {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.2em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--cyan-glow);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--cyan-glow);
+      animation: pulse 2s infinite;
+    }
+
+    .status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan-glow);
+      background: rgba(6, 182, 212, 0.05);
+      padding: 0.25rem 0.75rem;
+      border: 1px solid rgba(6, 182, 212, 0.15);
+      border-radius: 9999px;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* --- HERO CONTAINER --- */
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 6rem;
+    }
+
+    @media (min-width: 968px) {
+      .hero-split {
+        grid-template-columns: 5fr 7fr;
+      }
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      tracking-tight;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* --- INTEREST FORM WITH SHIMMER BUTTON --- */
+    .launch-form {
+      display: flex;
+      gap: 0.75rem;
+      background: rgba(24, 24, 27, 0.5);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      transition: border-color 0.3s;
+    }
+
+    .launch-form:focus-within {
+      border-color: rgba(6, 182, 212, 0.4);
+    }
+
+    .launch-form input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    .shimmer-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .shimmer-btn:hover {
+      background: #e4e4e7;
+      transform: translateY(-1px);
+    }
+
+    .shimmer-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 30%;
+      height: 200%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+      transform: rotate(30deg);
+      animation: shimmer 3s infinite linear;
+    }
+
+    /* --- 3D / MODEL CONTAINER WITH MAGIC UI BORDER BEAM --- */
+    .model-viewport {
+      height: 450px;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2rem;
+      backdrop-blur: 12px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Animated Laser Border Beam */
+    .model-viewport::before {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(90deg, var(--cyan-glow), var(--purple-glow));
+      animation: border-beam 6s infinite linear;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.15;
+    }
+
+    .placeholder-mesh {
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(6, 182, 212, 0.4);
+      font-size: 0.75rem;
+      text-align: center;
+      border: 1px dashed rgba(6, 182, 212, 0.2);
+      padding: 3rem;
+      border-radius: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* --- BENTO FEATURE GRID --- */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .bento-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .icon-badge {
+      width: 45px;
+      height: 45px;
+      border-radius: 0.75rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+
+    .icon-cyan { bg: rgba(6, 182, 212, 0.1); color: var(--cyan-glow); background: rgba(6, 182, 212, 0.08); }
+    .icon-purple { bg: rgba(168, 85, 247, 0.1); color: var(--purple-glow); background: rgba(168, 85, 247, 0.08); }
+
+    .bento-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .bento-card p {
+      color: var(--text-muted);
+      font-size: 0.925rem;
+      line-height: 1.5;
+    }
+
+    .bento-wide {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .bento-wide {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .tag-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    /* --- ANIMATION KEYFRAMES --- */
+    @keyframes shimmer {
+      100% { left: 150%; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 10px var(--cyan-glow)); }
+      50% { opacity: 0.4; filter: drop-shadow(0 0 2px var(--cyan-glow)); }
+    }
+
+    @keyframes border-beam {
+      0% { transform: rotate(0deg) translate(180px) rotate(0deg); }
+      100% { transform: rotate(360deg) translate(180px) rotate(-360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grid-container"></div>
+
+  <header>
+    <div class="header-flex">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        MAXIMALIST LABS
+      </div>
+      <div class="status-badge">PROJECT: MATRIX // ASSET.01</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero-split">
+      <div class="hero-text">
+        <h1>The Interactive Cyber Companion.</h1>
+        <p>An open-source, ultra-miniature wearable ecosystem engineered for makers. Packs deep memory buffers, high-speed BLE image arrays, and robust system parameters directly onto your keychain loop.</p>
+        
+        <div class="launch-form">
+          <input type="email" placeholder="Enter email for MakerWorld drop..." required />
+          <button class="shimmer-btn">Secure Access</button>
+        </div>
+      </div>
+
+      <div class="model-viewport">
+        <div class="placeholder-mesh">
+          [ RENDER_ENGINE_CONNECTED ]<br/><br/>
+          DROP YOUR .GLB ASSET HERE<br/>
+          VIA CANVAS PIPELINE
+        </div>
+      </div>
+    </div>
+
+    <div class="bento-grid">
+      
+      <div class="bento-card">
+        <div class="icon-badge icon-cyan">S3</div>
+        <h3>Xiao S3 Architecture</h3>
+        <p>Harnessing dual-core calculation nodes matched with an extensive 8MB PSRAM memory buffer to parse dense custom drawing frames cleanly.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="icon-badge icon-purple">IPS</div>
+        <h3>1.28" Circular Display</h3>
+        <p>A crystal-clear 240x240 circular interface driven directly over optimized hardware SPI pipelines for high frame rate feedback loops.</p>
+      </div>
+
+      <div class="bento-card">
+        <div class="icon-badge icon-cyan">BLE</div>
+        <h3>Web-Bluetooth Link</h3>
+        <p>Zero software dependencies or runtime compilation profiles required. Push drawings, canvas matrix blocks, and system stats directly from your browser engine.</p>
+      </div>
+
+      <div class="bento-card bento-wide">
+        <div>
+          <h3 style="margin-bottom: 0.5rem;">Solderless Kit Configuration</h3>
+          <p style="max-width: 700px;">Our custom circular motherboards abstract peripheral hardware connections into quick-insert terminal banks. Features hardware over-discharge protection systems built straight onto the core bus network.</p>
+        </div>
+        <div class="tag-pill">NO SOLDERING // SNAP LAYOUT</div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
